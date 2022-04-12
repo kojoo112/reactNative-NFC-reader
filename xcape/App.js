@@ -1,17 +1,10 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {StyleSheet} from 'react-native';
 import Home from './screens/Home.js';
 import FirstPage from './screens/FirstPage';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import SecondPage from './screens/SecondPage.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +14,7 @@ const App = () => {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Page1" component={FirstPage} />
+        <Stack.Screen name="Page2" component={SecondPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
