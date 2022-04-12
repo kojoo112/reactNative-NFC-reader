@@ -2,7 +2,7 @@
   package="com.xcape">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
