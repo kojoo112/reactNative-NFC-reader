@@ -1,24 +1,13 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
-import Video from 'react-native-video';
-import video from '../assets/video/test-video.mp4';
+import VideoPlayer from 'react-native-video-controls';
 
-const testVideo = require('../assets/video/test-video.mp4');
+const testVideo = require('../assets/videos/test-video.mp4');
 
 const SecondPage = () => {
   return (
     <View style={styles.container}>
-      <Video
-        // source={{
-        //   uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-        // }}
-        source={testVideo}
-        style={styles.backgroundVideo}
-        fullscreen={true}
-        resizeMode={'contain'}
-        repeat={true}
-        controls={true}
-      />
+      <VideoPlayer source={testVideo} disableBack />
     </View>
   );
 };
