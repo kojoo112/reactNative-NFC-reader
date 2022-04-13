@@ -1,13 +1,35 @@
 import React from 'react';
-import {View, Text, Image} from 'react-native';
+import {Text, Image, ScrollView, StyleSheet} from 'react-native';
 
 const FirstPage = () => {
   return (
-    <View>
-      <Image source={require('../assets/image/city.jpg')}></Image>
+    <ScrollView style={styles.container}>
+      <Image
+        style={{width: '100%', height: 400}}
+        source={require('../assets/images/city.jpg')}></Image>
+      <Image
+        style={{width: '100%', height: 400}}
+        source={require('../assets/images/phone.png')}></Image>
+      <Image
+        style={{width: '100%', height: 400}}
+        source={require('../assets/images/lens.jpeg')}></Image>
+      <Image
+        style={{width: '100%', height: 400}}
+        source={require('../assets/images/maskedCat.jpeg')}></Image>
+      <Image
+        style={{width: '100%', height: 400}}
+        source={require('../assets/images/test.jpeg')}></Image>
+
       <Text>FirstPage</Text>
-    </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    padding: 10,
+  },
+});
 
 export default FirstPage;
