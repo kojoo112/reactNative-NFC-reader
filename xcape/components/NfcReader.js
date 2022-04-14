@@ -4,23 +4,32 @@ import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 NfcManager.start();
 
 const NfcReader = ({setPageName}) => {
-  const [tag, setTag] = useState(null);
+  const [nfcFlag, setNfcFlag] = useState(false);
 
-  // useEffect(() => {
-  //   readNdef();
-  //   console.log('taging');
-  // }, [tag]);
+  useEffect(() => {
+    setTimeout(() => {
+      readNdef(setPageName);
+    }, 1500);
+  }, [nfcFlag]);
 
   const readNdef = async () => {
     try {
-      await NfcManager.requestTechnology(NfcTech.Ndef);
-      const tag = await NfcManager.getTag();
-      await setPageName(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
-      setTag(tag);
+      const supported = await NfcManager.isSupported();
+      const nfcScanning = await NfcManager.isEnabled();
+      if (supported && nfcScanning) {
+        NfcManager.cancelTechnologyRequest();
+        await NfcManager.start();
+        await NfcManager.requestTechnology([NfcTech.Ndef]);
+        const tag = await NfcManager.getTag();
+        tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
+        await setPageName(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
+        NfcManager.cancelTechnologyRequest();
+        setNfcFlag(!nfcFlag);
+      }
     } catch (ex) {
       console.warn('Oops!', ex);
-    } finally {
       NfcManager.cancelTechnologyRequest();
+      setNfcFlag(!nfcFlag);
     }
   };
 
