@@ -1,13 +1,22 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
+NfcManager.start();
 
 const NfcReader = ({setPageName}) => {
+  const [tag, setTag] = useState(null);
+
+  // useEffect(() => {
+  //   readNdef();
+  //   console.log('taging');
+  // }, [tag]);
+
   const readNdef = async () => {
     try {
       await NfcManager.requestTechnology(NfcTech.Ndef);
       const tag = await NfcManager.getTag();
-      setPageName(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
+      await setPageName(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
+      setTag(tag);
     } catch (ex) {
       console.warn('Oops!', ex);
     } finally {
@@ -28,9 +37,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
     padding: 10,
+    backgroundColor: '#0095F6',
   },
   text: {
-    color: 'black',
+    color: 'white',
   },
 });
 export default NfcReader;

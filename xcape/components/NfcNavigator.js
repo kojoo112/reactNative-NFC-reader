@@ -10,7 +10,7 @@ const NfcNavigator = () => {
   useEffect(() => {
     if (pageName !== '') {
       navigation.navigate('HintPage', {
-        pageNum: pageName
+        pageNum: pageName,
       });
     }
   }, [pageName]);
