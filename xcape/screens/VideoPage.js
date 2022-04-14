@@ -1,11 +1,10 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import React from 'react';
 import Video from 'react-native-video';
-import video from '../assets/video/test-video.mp4';
 
-const testVideo = require('../assets/video/test-video.mp4');
+const testVideo = require('../assets/videos/test-video.mp4');
 
-const SecondPage = () => {
+const VideoPage = () => {
   return (
     <View style={styles.container}>
       <Video
@@ -14,9 +13,7 @@ const SecondPage = () => {
         // }}
         source={testVideo}
         style={styles.backgroundVideo}
-        fullscreen={true}
         resizeMode={'contain'}
-        repeat={true}
         controls={true}
       />
     </View>
@@ -39,4 +36,4 @@ var styles = StyleSheet.create({
   },
 });
 
-export default SecondPage;
+export default VideoPage;
