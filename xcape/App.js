@@ -6,8 +6,20 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HintPage from './screens/HintPage.js';
 import VideoPage from './screens/VideoPage.js';
 import SplashScreen from 'react-native-splash-screen';
+import {firebase} from '@react-native-firebase/database';
 
 const Stack = createNativeStackNavigator();
+
+firebase
+  .app()
+  .database(
+    'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
+  )
+  .ref('/mrc001/thm001')
+  .once('value')
+  .then(snapshot => {
+    console.log(snapshot.val());
+  });
 
 const App = () => {
   useEffect(() => {

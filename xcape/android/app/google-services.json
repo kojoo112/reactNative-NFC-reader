@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1063603328752",
+    "firebase_url": "https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "xcape-hint-app",
+    "storage_bucket": "xcape-hint-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063603328752:android:062080f8226901dc769435",
+        "android_client_info": {
+          "package_name": "com.xcape"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063603328752-1qe5kmhooihumm5jfi2n8daknual4td9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xcape",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1063603328752-8ddc0dsdc6fkqvooltsbecmea40prpbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIFS_SbA-1qJjx8so5JnuDg16aZer6sas"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063603328752-8ddc0dsdc6fkqvooltsbecmea40prpbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
