@@ -1,20 +1,38 @@
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import Home from './screens/Home.js';
-import FirstPage from './screens/FirstPage';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SecondPage from './screens/SecondPage.js';
+import HintPage from './screens/HintPage.js';
+import VideoPage from './screens/VideoPage.js';
+import SplashScreen from 'react-native-splash-screen';
+import {firebase} from '@react-native-firebase/database';
 
 const Stack = createNativeStackNavigator();
 
+firebase
+  .app()
+  .database(
+    'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
+  )
+  .ref('/mrc001/thm001')
+  .once('value')
+  .then(snapshot => {
+    console.log(snapshot.val());
+  });
+
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  });
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Page1" component={FirstPage} />
-        <Stack.Screen name="Page2" component={SecondPage} />
+        <Stack.Screen name="HintPage" component={HintPage} />
+        <Stack.Screen name="VideoPage" component={VideoPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

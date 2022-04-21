@@ -1,13 +1,21 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import React from 'react';
-import VideoPlayer from 'react-native-video-controls';
+import Video from 'react-native-video';
 
 const testVideo = require('../assets/videos/test-video.mp4');
 
-const SecondPage = () => {
+const VideoPage = () => {
   return (
     <View style={styles.container}>
-      <VideoPlayer source={testVideo} disableBack />
+      <Video
+        // source={{
+        //   uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+        // }}
+        source={testVideo}
+        style={styles.backgroundVideo}
+        resizeMode={'contain'}
+        controls={true}
+      />
     </View>
   );
 };
@@ -28,4 +36,4 @@ var styles = StyleSheet.create({
   },
 });
 
-export default SecondPage;
+export default VideoPage;

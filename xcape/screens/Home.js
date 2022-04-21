@@ -4,13 +4,12 @@ import NfcNavigator from '../components/NfcNavigator';
 
 const Home = ({navigation}) => {
   return (
-    <View>
+    <View style={styles.container}>
       <NfcNavigator />
-      <Text style={{color: 'black'}}>Home입니당</Text>
-      <Button title="Page1 열기" onPress={() => navigation.navigate('Page1')} />
+
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Page2')}>
+        onPress={() => navigation.navigate('VideoPage')}>
         <Text style={styles.text}>비디오 테스트화면 가기</Text>
       </TouchableOpacity>
     </View>
@@ -18,6 +17,11 @@ const Home = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   button: {
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
