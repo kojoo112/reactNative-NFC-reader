@@ -19,8 +19,14 @@
     "react-native-nfc-manager": "^3.13.2",
     "react-native-safe-area-context": "^4.2.4",
     "react-native-screens": "^3.13.1",
+<<<<<<< HEAD
+    "react-native-vector-icons": "^9.1.0",
+    "react-native-video": "^5.2.0",
+    "react-native-video-controls": "^2.8.1"
+=======
     "react-native-splash-screen": "^3.3.0",
     "react-native-video": "^5.2.0"
+>>>>>>> bbd3da7476dd0760bd9177bea3b2c64322809fa9
   },
   "devDependencies": {
     "@babel/core": "7.17.9",
