@@ -4,7 +4,6 @@ import {StyleSheet} from 'react-native';
 import Home from './screens/Home.js';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HintPage from './screens/HintPage.js';
-import VideoPage from './screens/VideoPage.js';
 import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
@@ -20,7 +19,6 @@ const App = () => {
         initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="HintPage" component={HintPage} />
-        <Stack.Screen name="VideoPage" component={VideoPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
