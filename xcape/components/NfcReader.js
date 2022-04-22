@@ -3,13 +3,16 @@ import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 NfcManager.start();
 
-const NfcReader = ({setPageName}) => {
+const NfcReader = ({setHintCode}) => {
   const [nfcFlag, setNfcFlag] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      readNdef(setPageName);
+    const tagTimer = setTimeout(() => {
+      readNdef(setHintCode);
     }, 1500);
+    return () => {
+      clearTimeout(tagTimer);
+    };
   }, [nfcFlag]);
 
   const readNdef = async () => {
@@ -17,27 +20,27 @@ const NfcReader = ({setPageName}) => {
       const supported = await NfcManager.isSupported();
       const nfcScanning = await NfcManager.isEnabled();
       if (supported && nfcScanning) {
-        NfcManager.cancelTechnologyRequest();
-        await NfcManager.start();
         await NfcManager.requestTechnology([NfcTech.Ndef]);
         const tag = await NfcManager.getTag();
         tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
-        await setPageName(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
+        await setHintCode(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
         NfcManager.cancelTechnologyRequest();
         setNfcFlag(!nfcFlag);
       }
     } catch (ex) {
-      console.warn('Oops!', ex);
+      console.warn('다시 태그해주세요.');
       NfcManager.cancelTechnologyRequest();
       setNfcFlag(!nfcFlag);
+    } finally {
+      setHintCode('');
     }
   };
 
   return (
     <View>
-      <TouchableOpacity onPress={readNdef} style={styles.button}>
+      {/* <TouchableOpacity onPress={readNdef} style={styles.button}>
         <Text style={styles.text}>태그 읽기</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
