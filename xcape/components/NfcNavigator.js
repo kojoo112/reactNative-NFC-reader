@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import NfcReader from './NfcReader';
-import database, {firebase} from '@react-native-firebase/database';
+import {firebase} from '@react-native-firebase/database';
 
 const NfcNavigator = () => {
   const navigation = useNavigation();
