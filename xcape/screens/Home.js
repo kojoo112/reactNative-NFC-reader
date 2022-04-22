@@ -27,25 +27,31 @@ const Home = ({navigation}) => {
     <View style={styles.container}>
       <NfcNavigator />
       <Header></Header>
-      <View style={{flexDirection: 'row', padding: 20}}>
+      <View
+        style={{
+          flex: 0.073,
+          flexDirection: 'row',
+          padding: 20,
+        }}>
         <TextInput
           autoCapitalize={'characters'}
           maxLength={5}
           onChangeText={value => setHintKey(value)}
-          style={{backgroundColor: 'skyblue', flex: 1}}
+          keyboardType={'default'}
+          style={styles.textInput}
         />
         <Pressable style={styles.button} onPress={() => getHint(hintKey)}>
           <Text>검색</Text>
         </Pressable>
       </View>
-      {/* <View style={styles.hintMessage}>
-        <Text style={styles.text}>
+      <View style={styles.hintMessage}>
+        <Text style={styles.hintBoxStyle}>
           {hintMessage1 != '' ? hintMessage1 : ''}
         </Text>
-        <Text style={styles.text}>
+        <Text style={styles.hintBoxStyle}>
           {hintMessage2 != '' ? hintMessage2 : ''}
         </Text>
-      </View> */}
+      </View>
       <View></View>
     </View>
   );
@@ -54,22 +60,42 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'tomato',
+    backgroundColor: '#353a40',
+  },
+  textInput: {
+    backgroundColor: '#6c757e',
+    flex: 1,
+    borderWidth: 1.5,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderColor: 'white',
+    padding: 0,
   },
   button: {
     flex: 0.2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DDDDDD',
-    // padding: 10,
-    // marginTop: 10,
+    backgroundColor: '#333a44',
+    borderWidth: 1.5,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    borderColor: 'white',
   },
   text: {
     color: 'black',
   },
   hintMessage: {
+    flex: 0.95,
     padding: 20,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#353a40',
+  },
+  hintBoxStyle: {
+    flex: 0.5,
+    marginBottom: 10,
+    backgroundColor: '#212429',
+    borderWidth: 1.5,
+    borderRadius: 5,
+    borderColor: 'white',
   },
 });
 
