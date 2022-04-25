@@ -9,10 +9,10 @@ import {
   Vibration,
   Alert,
 } from 'react-native';
-import NfcNavigator from '../components/NfcNavigator';
 import {firebase} from '@react-native-firebase/database';
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
+import NfcRead from '../components/NfcRead';
 
 const Home = ({navigation}) => {
   const [hintKey, setHintKey] = useState('');
@@ -20,6 +20,7 @@ const Home = ({navigation}) => {
   const [hintMessage1, setHintMessage1] = useState('');
   const [hintMessage2, setHintMessage2] = useState('');
   const [hintVisible, setHintVisible] = useState(false);
+  const modal = ([modalVisible, setModalVisible] = useState(false));
 
   const getHint = hintKey => {
     Vibration.vibrate(100, false);
@@ -40,14 +41,12 @@ const Home = ({navigation}) => {
             setHintCount(hintCount + 1);
             setHintVisible(false);
           }
-          console.log(snapshot.val());
         });
     }
   };
 
   return (
     <View style={styles.container}>
-      <NfcNavigator />
       <Header hintCount={hintCount} setHintCount={setHintCount} />
       <View
         style={{
@@ -64,10 +63,25 @@ const Home = ({navigation}) => {
           style={styles.textInput}
           onSubmitEditing={() => getHint(hintKey)}
         />
-        <Pressable style={styles.button} onPress={() => getHint(hintKey)}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            getHint(hintKey);
+          }}
+          onLongPress={() => {
+            setModalVisible(!modalVisible);
+          }}>
           <Icon name="search-sharp" size={24} color={'white'} />
         </Pressable>
       </View>
+      {modalVisible ? (
+        <NfcRead
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      ) : (
+        <></>
+      )}
       <View style={styles.hintView}>
         <View style={styles.hintBoxStyle}>
           <Text style={styles.hintMessage}>
