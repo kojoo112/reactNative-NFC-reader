@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 NfcManager.start();
 
@@ -28,7 +28,7 @@ const NfcReader = ({setHintCode}) => {
         setNfcFlag(!nfcFlag);
       }
     } catch (ex) {
-      console.warn('다시 태그해주세요.');
+      // console.warn('다시 태그해주세요.');
       NfcManager.cancelTechnologyRequest();
       setNfcFlag(!nfcFlag);
     } finally {

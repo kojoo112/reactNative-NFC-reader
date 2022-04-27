@@ -2,11 +2,42 @@ import {StyleSheet, Text, View, Pressable, Vibration} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import prompt from 'react-native-prompt-android';
+import {useNavigation} from '@react-navigation/native';
 
 const Header = ({hintCount, setHintCount}) => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Pressable>
+      <Pressable
+        onPress={() => {
+          Vibration.vibrate(200, false);
+          navigation.navigate('Setting');
+          // prompt(
+          //   '힌트관리자',
+          //   '관리자 비밀번호를 입력하세요',
+          //   [
+          //     {
+          //       text: 'Cancel',
+          //       onPress: () => console.log('Cancel Pressed'),
+          //       style: 'cancel',
+          //     },
+          //     {
+          //       text: 'OK',
+          //       onPress: password => {
+          //         if (password == '5772') {
+          //           navigation.navigate('Setting');
+          //         }
+          //       },
+          //     },
+          //   ],
+          //   {
+          //     type: 'secure-text',
+          //     cancelable: false,
+          //     placeholder: '비밀번호 입력...',
+          //   },
+          // );
+        }}>
         <Icon name="settings-sharp" size={24} color={'white'} />
       </Pressable>
       <Text style={styles.themeName}>운필귀정</Text>
