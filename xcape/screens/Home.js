@@ -14,7 +14,7 @@ import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NfcRead from '../components/NfcRead';
 
-const Home = ({navigation}) => {
+const Home = ({navigation, merchant}) => {
   const [hintKey, setHintKey] = useState('');
   const [hintCount, setHintCount] = useState(0);
   const [hintMessage1, setHintMessage1] = useState('');
@@ -50,7 +50,7 @@ const Home = ({navigation}) => {
       <Header hintCount={hintCount} setHintCount={setHintCount} />
       <View
         style={{
-          flex: 0.073,
+          flex: 0.085,
           flexDirection: 'row',
           padding: 20,
         }}>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   button: {
-    flex: 0.2,
+    flex: 0.4,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#333a44',
@@ -150,9 +150,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   hintView: {
-    flex: 0.95,
+    flex: 1,
     padding: 20,
     backgroundColor: '#353a40',
+    marginTop: -20,
   },
   hintBoxStyle: {
     flex: 0.5,
