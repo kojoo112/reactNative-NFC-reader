@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {firebase} from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
+import {getData} from '../util/Util';
 
 const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   const navigation = useNavigation();
@@ -14,7 +15,9 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
       await NfcManager.requestTechnology([NfcTech.Ndef]);
       const tag = await NfcManager.getTag();
       tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
-      await setHintCode(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
+      await setHintCode(
+        JSON.parse(Ndef.text.decodePayload(tag.ndefMessage[0].payload)),
+      );
     } catch (ex) {
       console.log('NfcRead >>> readTag >>> : ', ex);
     } finally {
@@ -71,8 +74,17 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   };
 
   useEffect(() => {
+    const getComponents = async () => {
+      const mrc = hintCode.mrc;
+      const thm = hintCode.thm;
+      const page = hintCode.page;
+
+      const url = `/hintImage/${mrc}/${thm}/${page}/components`; // 수정필요
+      await getData(url, hintObject);
+    };
+
     if (hintCode !== '') {
-      getHint();
+      getComponents();
     }
   }, [hintCode]);
 
