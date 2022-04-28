@@ -5,13 +5,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HintPage from './screens/HintPage.js';
 import SplashScreen from 'react-native-splash-screen';
 import Setting from './screens/Setting.js';
+import TagView from './components/TagView.js';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [merchant, setMerchant] = useState('');
   const [theme, setTheme] = useState('');
-  const [page, setPage] = useState('');
 
   useEffect(() => {
     SplashScreen.hide();
@@ -22,15 +22,11 @@ const App = () => {
         screenOptions={{headerShown: false}}
         initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="TagView" component={TagView} />
         <Stack.Screen name="HintPage" component={HintPage} />
         <Stack.Screen name="Setting">
           {props => (
-            <Setting
-              {...props}
-              setMerchant={setMerchant}
-              setTheme={setTheme}
-              setPage={setPage}
-            />
+            <Setting {...props} setMerchant={setMerchant} setTheme={setTheme} />
           )}
         </Stack.Screen>
       </Stack.Navigator>

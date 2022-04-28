@@ -5,25 +5,48 @@ import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {firebase} from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 
-const NfcReader = ({modalVisible, setModalVisible}) => {
+const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   const navigation = useNavigation();
   const [hintCode, setHintCode] = useState('');
 
   const readTag = async () => {
     try {
       await NfcManager.requestTechnology([NfcTech.Ndef]);
-
       const tag = await NfcManager.getTag();
       tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
       await setHintCode(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
     } catch (ex) {
-      // for tag reading, we don't actually need to show any error
-      NfcManager.cancelTechnologyRequest();
-      console.log(ex);
+      console.log('NfcRead >>> readTag >>> : ', ex);
     } finally {
-      NfcManager.cancelTechnologyRequest();
-      setModalVisible(!modalVisible);
+      closeModal();
     }
+  };
+
+  const writeTag = async () => {
+    const obejct = {
+      merchantCode: hintObject.merchantCode,
+      themeCode: hintObject.themeCode,
+      pageName: hintObject.pageName,
+    };
+
+    try {
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      const bytes = Ndef.encodeMessage([
+        Ndef.textRecord(JSON.stringify(obejct)),
+      ]);
+      if (bytes) {
+        await NfcManager.ndefHandler.writeNdefMessage(bytes);
+      }
+    } catch (ex) {
+      console.log('NfcRead >>> writeTag >>> : ', ex);
+    } finally {
+      closeModal();
+    }
+  };
+
+  const tagDevide = {
+    readTag: readTag,
+    writeTag: writeTag,
   };
 
   const getHint = async () => {
@@ -35,10 +58,16 @@ const NfcReader = ({modalVisible, setModalVisible}) => {
       .ref(`/hintImage/mrc003/thm003/${hintCode}`)
       .once('value')
       .then(snapshot => {
-        navigation.navigate('HintPage', {
-          hint: snapshot.val(),
-        });
+        console.log(snapshot.val());
+        // navigation.navigate('HintPage', {
+        //   hint: snapshot.val(),
+        // });
       });
+  };
+
+  const closeModal = () => {
+    NfcManager.cancelTechnologyRequest();
+    setModalVisible(!modalVisible);
   };
 
   useEffect(() => {
@@ -52,10 +81,9 @@ const NfcReader = ({modalVisible, setModalVisible}) => {
       animationType="slide"
       transparent={true}
       visible={modalVisible}
-      onShow={() => readTag()}
+      onShow={tagDevide[action]}
       onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-        setModalVisible(!modalVisible);
+        closeModal();
       }}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
@@ -66,7 +94,9 @@ const NfcReader = ({modalVisible, setModalVisible}) => {
           <Text style={styles.modalText}>태그를 해주세요</Text>
           <Pressable
             style={[styles.button, styles.buttonClose]}
-            onPress={() => setModalVisible(!modalVisible)}>
+            onPress={() => {
+              closeModal();
+            }}>
             <Text style={styles.textStyle}>취소</Text>
           </Pressable>
         </View>
@@ -125,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NfcReader;
+export default NfcRead;

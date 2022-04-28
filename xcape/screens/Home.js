@@ -14,13 +14,13 @@ import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NfcRead from '../components/NfcRead';
 
-const Home = ({navigation, merchant}) => {
+const Home = ({navigation}) => {
   const [hintKey, setHintKey] = useState('');
   const [hintCount, setHintCount] = useState(0);
   const [hintMessage1, setHintMessage1] = useState('');
   const [hintMessage2, setHintMessage2] = useState('');
   const [hintVisible, setHintVisible] = useState(false);
-  const modal = ([modalVisible, setModalVisible] = useState(false));
+  const [modalVisible, setModalVisible] = useState(false);
 
   const getHint = hintKey => {
     Vibration.vibrate(100, false);
@@ -69,19 +69,17 @@ const Home = ({navigation, merchant}) => {
             getHint(hintKey);
           }}
           onLongPress={() => {
+            Vibration.vibrate(200, false);
             setModalVisible(!modalVisible);
           }}>
           <Icon name="search-sharp" size={24} color={'white'} />
         </Pressable>
       </View>
-      {modalVisible ? (
-        <NfcRead
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
-      ) : (
-        <></>
-      )}
+      <NfcRead
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        action={'readTag'}
+      />
       <View style={styles.hintView}>
         <View style={styles.hintBoxStyle}>
           <Text style={styles.hintMessage}>

@@ -1,16 +1,22 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, Vibration, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Dropdown from '../components/Dropdown';
 import {getData} from '../util/Util';
+import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
+import NfcRead from '../components/NfcRead';
 
-const Setting = ({setMerchant, setTheme, setPage, navigation}) => {
+const Setting = ({setMerchant, setTheme, navigation}) => {
   const [merchantList, setMerchantList] = useState({});
   const [themeList, setThemeList] = useState({});
-  const [pageList, setPageList] = useState({});
+  const [pageList, setPageList] = useState([]);
 
   const [merchantValue, setMerchantValue] = useState('mrc001');
   const [themeValue, setThemeValue] = useState('thm001');
-  const [pageValue, setPageValue] = useState('page1');
+  const [pageValue, setPageValue] = useState('page01');
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [hintObject, setHintObject] = useState({});
 
   const getMerchantList = async () => {
     await getData('/merchants', setMerchantList);
@@ -21,7 +27,20 @@ const Setting = ({setMerchant, setTheme, setPage, navigation}) => {
   };
 
   const getPageList = async (merchantCode, themeCode) => {
-    const data = await getData(`/hintImage/mrc003/thm003`);
+    await getData(
+      `/hintImage/${merchantCode}/${themeCode}`,
+      setPageList,
+      false,
+    );
+  };
+
+  const createHintObject = () => {
+    const hintObject = {
+      merchantCode: merchantValue,
+      themeCode: themeValue,
+      pageName: pageValue,
+    };
+    setHintObject(hintObject);
   };
 
   useEffect(() => {
@@ -75,11 +94,23 @@ const Setting = ({setMerchant, setTheme, setPage, navigation}) => {
           />
         </View>
         <View style={styles.content}>
-          <Pressable onPress={() => {}} style={styles.button}>
+          <Pressable
+            onPress={() => {
+              Vibration.vibrate(200, false);
+              setModalVisible(!modalVisible);
+              createHintObject();
+            }}
+            style={styles.button}>
             <Text style={styles.textInButton}>태그쓰기</Text>
           </Pressable>
         </View>
       </View>
+      <NfcRead
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        action={'writeTag'}
+        hintObject={hintObject}
+      />
     </View>
   );
 };
