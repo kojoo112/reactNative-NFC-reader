@@ -1,6 +1,6 @@
 import {firebase} from '@react-native-firebase/database';
 
-export async function getData(ref, setState) {
+export async function getData(ref, setState, isReturnKeys = true) {
   try {
     await firebase
       .app()
@@ -10,14 +10,13 @@ export async function getData(ref, setState) {
       .ref(ref)
       .once('value')
       .then(snapshot => {
-        console.log('set state', setState);
-        if (setState !== undefined) {
+        if (isReturnKeys) {
           setState(snapshot.val());
         } else {
-          return Object.keys(snapshot.val());
+          setState(Object.keys(snapshot.val()).sort());
         }
       });
   } catch (e) {
-    console.log('asdfasdf', e);
+    console.log('>>> Util.js >>> getData() : ', e);
   }
 }

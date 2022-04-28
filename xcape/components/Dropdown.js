@@ -11,11 +11,17 @@ const Dropdown = props => {
       style={{flex: 1}}
       selectedValue={state}
       onValueChange={(value, index) => setState(value)}>
-      {Object.entries(objectList)
-        .sort((a, b) => a[0].localeCompare(b[0]))
-        .map((entrie, idx) => {
-          return <Picker.Item label={entrie[1]} value={entrie[0]} key={idx} />;
-        })}
+      {Array.isArray(objectList)
+        ? objectList.map((value, idx) => {
+            return <Picker.Item label={value} value={value} key={idx} />;
+          })
+        : Object.entries(objectList)
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map((entrie, idx) => {
+              return (
+                <Picker.Item label={entrie[1]} value={entrie[0]} key={idx} />
+              );
+            })}
     </Picker>
   );
 };

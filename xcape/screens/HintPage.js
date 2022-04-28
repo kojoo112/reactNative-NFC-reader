@@ -3,6 +3,7 @@ import {Text, View} from 'react-native';
 import ImageView from '../components/ImageView';
 
 const HintPage = props => {
+  console.log(props);
   const hint = props.route.params.hint;
 
   return (
