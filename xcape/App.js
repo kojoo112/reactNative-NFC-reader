@@ -5,12 +5,15 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from 'react-native-splash-screen';
 import Setting from './screens/Setting.js';
 import TagView from './screens/TagView.js';
+import {LogBox} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [merchant, setMerchant] = useState('');
   const [theme, setTheme] = useState('');
+
+  LogBox.ignoreAllLogs();
 
   useEffect(() => {
     SplashScreen.hide();

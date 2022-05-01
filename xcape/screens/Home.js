@@ -31,7 +31,7 @@ const Home = ({navigation}) => {
         .database(
           'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
         )
-        .ref(hintKey)
+        .ref(`/hintCode/mrc003/thm003/${hintKey}`)
         .once('value')
         .then(snapshot => {
           if (snapshot.val() === null) {
@@ -47,7 +47,6 @@ const Home = ({navigation}) => {
   };
 
   useEffect(() => {
-    console.log(components);
     if (components.length > 0) {
       navigation.navigate('TagView', {components: components});
     }

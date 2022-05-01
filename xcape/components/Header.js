@@ -9,36 +9,38 @@ const Header = ({hintCount, setHintCount}) => {
 
   return (
     <View style={styles.container}>
-      <Pressable
+      {/* <Pressable
         onPress={() => {
           Vibration.vibrate(200, false);
-          prompt(
-            '힌트관리자',
-            '관리자 비밀번호를 입력하세요',
-            [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              {
-                text: 'OK',
-                onPress: password => {
-                  if (password == '5772') {
-                    navigation.navigate('Setting');
-                  }
-                },
-              },
-            ],
-            {
-              type: 'secure-text',
-              cancelable: false,
-              placeholder: '비밀번호 입력...',
-            },
-          );
+          navigation.navigate('Setting');
+          // prompt(
+          //   '힌트관리자',
+          //   '관리자 비밀번호를 입력하세요',
+          //   [
+          //     {
+          //       text: 'Cancel',
+          //       onPress: () => console.log('Cancel Pressed'),
+          //       style: 'cancel',
+          //     },
+          //     {
+          //       text: 'OK',
+          //       onPress: password => {
+          //         if (password == '5772') {
+          //           navigation.navigate('Setting');
+          //         }
+          //       },
+          //     },
+          //   ],
+          //   {
+          //     type: 'secure-text',
+          //     cancelable: false,
+          //     placeholder: '비밀번호 입력...',
+          //   },
+          // );
         }}>
         <Icon name="settings-sharp" size={24} color={'white'} />
-      </Pressable>
+      </Pressable> */}
+      <View style={{width: 40}}></View>
       <Text style={styles.themeName}>운필귀정</Text>
       <View>
         <Pressable

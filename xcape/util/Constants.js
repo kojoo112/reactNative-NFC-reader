@@ -1,0 +1,2 @@
+export const MERCHANT_CHANGED = 'MERCHANT_CHANGED';
+export const THEME_CHANGED = 'THEME_CHANGED';

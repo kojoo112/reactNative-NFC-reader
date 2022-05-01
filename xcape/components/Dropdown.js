@@ -3,14 +3,14 @@ import {Picker} from '@react-native-picker/picker';
 
 const Dropdown = props => {
   const state = props.state;
-  const setState = props.setState;
+  const action = props.action;
   const objectList = props.objectList;
-
+  // console.log(action);
   return (
     <Picker
       style={{flex: 1}}
-      selectedValue={state}
-      onValueChange={(value, index) => setState(value)}>
+      // selectedValue={state}
+      onValueChange={(value, index) => action(value)}>
       {Array.isArray(objectList)
         ? objectList.map((value, idx) => {
             return <Picker.Item label={value} value={value} key={idx} />;
