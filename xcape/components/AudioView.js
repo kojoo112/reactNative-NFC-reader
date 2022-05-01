@@ -1,12 +1,13 @@
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Sound from 'react-native-sound';
+import ImageView from './ImageView';
 
 // 음성파일 props {1}
 // audioInit함수 require 하드코딩 수정 {2}
 // 이미지 추가 및 스타일시트 수정
 
-const AudioView = () /*{1}*/ => {
+const AudioView = props => {
   const [audioFlag, setAudioFlag] = useState(true);
   const [hintAudio, setHintAudio] = useState({});
 
@@ -14,7 +15,7 @@ const AudioView = () /*{1}*/ => {
 
   const audioInit = () => {
     const tempAudio = new Sound(
-      require('./../assets/sound/testMusic.mp3'), // {2}
+      require('./../assets/sound/audio07.mp3'), // {2}
       Sound.MAIN_BUNDLE,
       error => {
         if (error) {
@@ -44,21 +45,19 @@ const AudioView = () /*{1}*/ => {
   };
 
   return (
-    <TouchableOpacity onPress={() => handleAudioFlag()}>
-      <Text style={{color: 'black', fontSize: 40, backgroundColor: 'green'}}>
-        재생정지
-      </Text>
-    </TouchableOpacity>
+    <View>
+      <ImageView url={props.url} />
+      <TouchableOpacity
+        onPress={() => handleAudioFlag()}
+        style={{
+          position: 'absolute',
+          top: 267,
+          left: 208,
+          width: 50,
+          height: 90,
+        }}></TouchableOpacity>
+    </View>
   );
 };
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'green',
-  },
-});
 
 export default AudioView;

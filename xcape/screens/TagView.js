@@ -1,4 +1,4 @@
-import {View, ScrollView, StyleSheet} from 'react-native';
+import {ScrollView} from 'react-native';
 import React from 'react';
 import ImageView from '../components/ImageView';
 import VideoView from '../components/VideoView';
@@ -13,23 +13,19 @@ const componentList = {
 const TagView = props => {
   const components = props.route.params.components;
 
+  // @Test
+  // const components = [
+  //   {component: 'ImageView', url: 'https://i.ibb.co/Cw5YYfy/Page10.png'},
+  //   {component: 'ImageView', url: 'https://i.ibb.co/sg720jH/Page1.png'},
+  // ];
   return (
-    <ScrollView
-      style={{
-        flex: 1,
-        backgroundColor: 'skyblue',
-        flexDirection: 'column',
-        width: '100%',
-      }}>
+    <ScrollView>
       {components.map((element, idx) => {
-        console.log(element);
-        // const Component = componentList[element[idx].component];
-        // return <Component key={idx} url={element[idx].url} />;
+        const Component = componentList[element.component];
+        return <Component key={idx} url={element.url} />;
       })}
     </ScrollView>
   );
 };
 
 export default TagView;
-
-const styles = StyleSheet.create({});

@@ -1,9 +1,9 @@
 import {Pressable, StyleSheet, Text, Vibration, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import Dropdown from '../components/Dropdown';
 import {getData} from '../util/Util';
-import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import NfcRead from '../components/NfcRead';
+import {MERCHANT_CHANGED, THEME_CHANGED} from '../util/Constants';
 
 const Setting = ({setMerchant, setTheme, navigation}) => {
   const [merchantList, setMerchantList] = useState({});
@@ -34,24 +34,42 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
     );
   };
 
-  const createHintObject = () => {
-    const hintObject = {
-      merchantCode: merchantValue,
-      themeCode: themeValue,
-      pageName: pageValue,
-    };
-    setHintObject(hintObject);
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case MERCHANT_CHANGED:
+        console.log(action.value);
+        // getThemeList(action.value);
+        console.log({...state, merchantCode: action.value});
+        return {...state, merchantCode: action.value};
+
+      case THEME_CHANGED:
+        console.log(action.value);
+        console.log('reducer >>> themeChanged: ', state);
+        return {...state, themeCode: action.value};
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, {
+    merchantCode: 'mrc001',
+    themeCode: 'thm001',
+    pageName: 'page01',
+  });
+
+  const merchantChanged = merchantCode => {
+    console.log('merchantCode: ', merchantCode);
+    dispatch({type: MERCHANT_CHANGED, value: merchantCode});
+  };
+
+  const themeChanged = themeCode => {
+    console.log('themeChanged: ', themeCode);
+    dispatch({type: THEME_CHANGED, value: themeCode});
   };
 
   useEffect(() => {
-    getMerchantList()
-      .then(() => {
-        return getThemeList(merchantValue);
-      })
-      .then(() => {
-        return getPageList(merchantValue, themeValue);
-      });
-  }, [merchantValue]);
+    getMerchantList().then(() => {
+      return getThemeList('mrc001');
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -59,24 +77,24 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
         <View style={styles.content}>
           <Text style={styles.label}>가맹점</Text>
           <Dropdown
-            state={merchantValue}
-            setState={setMerchantValue}
+            // state={'mrc001'}
+            action={merchantChanged}
             objectList={merchantList}
           />
         </View>
         <View style={styles.content}>
           <Text style={styles.label}>테마</Text>
           <Dropdown
-            state={themeValue}
-            setState={setThemeValue}
+            // state={'thm001'}
+            action={themeChanged}
             objectList={themeList}
           />
         </View>
         <View style={styles.content}>
           <Pressable
             onPress={() => {
-              setMerchant(merchantValue);
-              setTheme(themeValue);
+              // setMerchant(state.merchantCode);
+              // setTheme(themeValue);
               navigation.navigate('Home');
             }}
             style={styles.button}>
@@ -87,18 +105,18 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
       <View style={styles.wrapperBox}>
         <View style={styles.content}>
           <Text style={styles.label}>Page</Text>
-          <Dropdown
+          {/* <Dropdown
             state={pageValue}
             setState={setPageValue}
             objectList={pageList}
-          />
+          /> */}
         </View>
         <View style={styles.content}>
           <Pressable
             onPress={() => {
               Vibration.vibrate(200, false);
               setModalVisible(!modalVisible);
-              createHintObject();
+              // createHintObject();
             }}
             style={styles.button}>
             <Text style={styles.textInButton}>태그쓰기</Text>

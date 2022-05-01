@@ -3,11 +3,9 @@ import {View, Text, Image, Pressable, StyleSheet} from 'react-native';
 import Modal from 'react-native-modal';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {firebase} from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
 import {getData} from '../util/Util';
 
 const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
-  const navigation = useNavigation();
   const [hintCode, setHintCode] = useState('');
 
   const readTag = async () => {
@@ -52,22 +50,6 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
     writeTag: writeTag,
   };
 
-  const getHint = async () => {
-    await firebase
-      .app()
-      .database(
-        'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
-      )
-      .ref(`/hintImage/mrc003/thm003/${hintCode}`)
-      .once('value')
-      .then(snapshot => {
-        console.log(snapshot.val());
-        // navigation.navigate('HintPage', {
-        //   hint: snapshot.val(),
-        // });
-      });
-  };
-
   const closeModal = () => {
     NfcManager.cancelTechnologyRequest();
     setModalVisible(!modalVisible);
@@ -75,11 +57,11 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
 
   useEffect(() => {
     const getComponents = async () => {
-      const mrc = hintCode.mrc;
-      const thm = hintCode.thm;
-      const page = hintCode.page;
+      const merchantCode = hintCode.merchantCode;
+      const themeCode = hintCode.themeCode;
+      const pageName = hintCode.pageName;
 
-      const url = `/hintImage/${mrc}/${thm}/${page}/components`; // 수정필요
+      const url = `/hintImage/${merchantCode}/${themeCode}/${pageName}/components`;
       await getData(url, hintObject);
     };
 

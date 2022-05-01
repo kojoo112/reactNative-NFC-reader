@@ -1,25 +1,22 @@
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
-
+import {StyleSheet, Dimensions, Image, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const testImg = require('../assets/image/Page1.png');
-
 const ImageView = url => {
   const [ratio, setRatio] = useState(0);
   const [imageUrl, setImageUrl] = useState(url.url);
 
-  const imageSize = () => {
+  const getImageSize = () => {
     Image.getSize(imageUrl, (width, height) => {
-      return width / height;
-      // setRatio(width / height);
+      setRatio(width / height);
     });
   };
-  // useEffect(() => {
-  //   setRatio(width / height);
-  // }, [imageUrl]);
+
+  useEffect(() => {
+    getImageSize();
+  }, [imageUrl]);
 
   return (
     <View>
@@ -30,11 +27,13 @@ const ImageView = url => {
             : {
                 width: '100%',
                 height: undefined,
-                aspectRatio: imageSize(),
+                aspectRatio: ratio,
               },
         ]}
         resizeMode={'stretch'}
-        uri={imageUrl}></Image>
+        source={{uri: imageUrl}}></Image>
+      {/* // source={require('../assets/image/Page10.png')}></Image>
+    // source={{uri: 'https://i.ibb.co/ChM2yLJ/Page10.png'}}></Image> */}
     </View>
   );
 };
