@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TextInput,
@@ -20,6 +20,7 @@ const Home = ({navigation}) => {
   const [hintMessage1, setHintMessage1] = useState('');
   const [hintMessage2, setHintMessage2] = useState('');
   const [hintVisible, setHintVisible] = useState(false);
+  const [components, setComponents] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   const getHint = hintKey => {
@@ -30,7 +31,7 @@ const Home = ({navigation}) => {
         .database(
           'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
         )
-        .ref(hintKey)
+        .ref(`/hintCode/mrc003/thm003/${hintKey}`)
         .once('value')
         .then(snapshot => {
           if (snapshot.val() === null) {
@@ -44,6 +45,12 @@ const Home = ({navigation}) => {
         });
     }
   };
+
+  useEffect(() => {
+    if (components.length > 0) {
+      navigation.navigate('TagView', {components: components});
+    }
+  }, [components]);
 
   return (
     <View style={styles.container}>
@@ -79,6 +86,7 @@ const Home = ({navigation}) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         action={'readTag'}
+        hintObject={setComponents}
       />
       <View style={styles.hintView}>
         <View style={styles.hintBoxStyle}>

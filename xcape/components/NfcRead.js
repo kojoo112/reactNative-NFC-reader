@@ -5,7 +5,6 @@ import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {getData} from '../util/util';
 
 const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
-  const navigation = useNavigation();
   const [hintCode, setHintCode] = useState('');
 
   const readTag = async () => {
@@ -13,7 +12,9 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
       await NfcManager.requestTechnology([NfcTech.Ndef]);
       const tag = await NfcManager.getTag();
       tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
-      await setHintCode(Ndef.text.decodePayload(tag.ndefMessage[0].payload));
+      await setHintCode(
+        JSON.parse(Ndef.text.decodePayload(tag.ndefMessage[0].payload)),
+      );
     } catch (ex) {
       console.log('NfcRead >>> readTag >>> : ', ex);
     } finally {
@@ -48,30 +49,23 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
     writeTag: writeTag,
   };
 
-  const getHint = async () => {
-    await firebase
-      .app()
-      .database(
-        'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
-      )
-      .ref(`/hintImage/mrc003/thm003/${hintCode}`)
-      .once('value')
-      .then(snapshot => {
-        console.log(snapshot.val());
-        // navigation.navigate('HintPage', {
-        //   hint: snapshot.val(),
-        // });
-      });
-  };
-
   const closeModal = () => {
     NfcManager.cancelTechnologyRequest();
     setModalVisible(!modalVisible);
   };
 
   useEffect(() => {
+    const getComponents = async () => {
+      const merchantCode = hintCode.merchantCode;
+      const themeCode = hintCode.themeCode;
+      const pageName = hintCode.pageName;
+
+      const url = `/hintImage/${merchantCode}/${themeCode}/${pageName}/components`;
+      await getData(url, hintObject);
+    };
+
     if (hintCode !== '') {
-      getHint();
+      getComponents();
     }
   }, [hintCode]);
 

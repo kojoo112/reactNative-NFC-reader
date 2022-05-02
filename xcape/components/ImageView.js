@@ -1,40 +1,25 @@
-import {
-  StyleSheet,
-  Dimensions,
-  Image,
-  ScrollView,
-  TextInput,
-  Button,
-} from 'react-native';
-
+import {StyleSheet, Dimensions, Image, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-
-const images = {
-  image001: require('../assets/image/Page1.png'),
-  image002: require('../assets/image/Page2.png'),
-  image003: require('../assets/image/Page3.png'),
-  image004: require('../assets/image/Page4.png'),
-  image005: require('../assets/image/Page5.png'),
-  image006: require('../assets/image/Page6.png'),
-  image007: require('../assets/image/Page7.png'),
-  image008: require('../assets/image/Page8.png'),
-  image009: require('../assets/image/Page9.png'),
-  image010: require('../assets/image/Page10.png'),
-};
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const ImageView = ({image}) => {
+const ImageView = url => {
   const [ratio, setRatio] = useState(0);
-  const {width, height} = Image.resolveAssetSource(images[image]);
+  const [imageUrl, setImageUrl] = useState(url.url);
+
+  const getImageSize = () => {
+    Image.getSize(imageUrl, (width, height) => {
+      setRatio(width / height);
+    });
+  };
 
   useEffect(() => {
-    setRatio(width / height);
-  }, [image]);
+    getImageSize();
+  }, [imageUrl]);
 
   return (
-    <ScrollView>
+    <View>
       <Image
         style={[
           ratio > 0.3
@@ -46,8 +31,10 @@ const ImageView = ({image}) => {
               },
         ]}
         resizeMode={'stretch'}
-        source={images[image]}></Image>
-    </ScrollView>
+        source={{uri: imageUrl}}></Image>
+      {/* // source={require('../assets/image/Page10.png')}></Image>
+    // source={{uri: 'https://i.ibb.co/ChM2yLJ/Page10.png'}}></Image> */}
+    </View>
   );
 };
 

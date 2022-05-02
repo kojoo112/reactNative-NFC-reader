@@ -105,7 +105,6 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
     };
     setHintObject(hintObject);
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.wrapperBox}>
@@ -151,7 +150,7 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
             onPress={() => {
               Vibration.vibrate(200, false);
               setModalVisible(!modalVisible);
-              createHintObject();
+              // createHintObject();
             }}
             style={styles.button}>
             <Text style={styles.textInButton}>태그쓰기</Text>
