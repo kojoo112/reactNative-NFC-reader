@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, Image, Pressable, StyleSheet} from 'react-native';
 import Modal from 'react-native-modal';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
-import {firebase} from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
+import {getData} from '../util/util';
 
 const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   const navigation = useNavigation();
@@ -23,7 +22,7 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   };
 
   const writeTag = async () => {
-    const obejct = {
+    const object = {
       merchantCode: hintObject.merchantCode,
       themeCode: hintObject.themeCode,
       pageName: hintObject.pageName,
@@ -32,7 +31,7 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
     try {
       await NfcManager.requestTechnology(NfcTech.Ndef);
       const bytes = Ndef.encodeMessage([
-        Ndef.textRecord(JSON.stringify(obejct)),
+        Ndef.textRecord(JSON.stringify(object)),
       ]);
       if (bytes) {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
