@@ -1,101 +1,135 @@
 import {Pressable, StyleSheet, Text, Vibration, View} from 'react-native';
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useEffect, useState, useReducer} from 'react';
 import Dropdown from '../components/Dropdown';
-import {getData} from '../util/Util';
+import {getData} from '../util/util';
 import NfcRead from '../components/NfcRead';
-import {MERCHANT_CHANGED, THEME_CHANGED} from '../util/Constants';
+import {
+  INIT_DATA,
+  MERCHANT_CHANGED,
+  THEME_CHANGED,
+  PAGE_CHANGED,
+} from '../util/constants';
+
+export const reducer = (state, action) => {
+  switch (action.type) {
+    case INIT_DATA:
+      return action.data;
+    case MERCHANT_CHANGED:
+      return {...action.payload};
+    case THEME_CHANGED:
+      return {...action.payload};
+    case PAGE_CHANGED:
+      return {...state, pageValue: action.payload};
+    default:
+      return state;
+  }
+};
 
 const Setting = ({setMerchant, setTheme, navigation}) => {
-  const [merchantList, setMerchantList] = useState({});
-  const [themeList, setThemeList] = useState({});
-  const [pageList, setPageList] = useState([]);
-
-  const [merchantValue, setMerchantValue] = useState('mrc001');
-  const [themeValue, setThemeValue] = useState('thm001');
-  const [pageValue, setPageValue] = useState('page01');
-
   const [modalVisible, setModalVisible] = useState(false);
 
   const [hintObject, setHintObject] = useState({});
 
+  const [state, dispatch] = useReducer(reducer, {});
+
   const getMerchantList = async () => {
-    await getData('/merchants', setMerchantList);
+    return await getData('/merchants');
   };
 
   const getThemeList = async merchantCode => {
-    await getData(`/themes/${merchantCode}`, setThemeList);
+    return await getData(`/themes/${merchantCode}`);
   };
 
   const getPageList = async (merchantCode, themeCode) => {
-    await getData(
-      `/hintImage/${merchantCode}/${themeCode}`,
-      setPageList,
-      false,
-    );
+    return await getData(`/hintImage/${merchantCode}/${themeCode}`, false);
   };
 
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case MERCHANT_CHANGED:
-        console.log(action.value);
-        // getThemeList(action.value);
-        console.log({...state, merchantCode: action.value});
-        return {...state, merchantCode: action.value};
+  const merchantChanged = async merchantCode => {
+    const theme = await getThemeList(merchantCode);
+    const page = await getPageList(merchantCode, 'thm001');
+    const data = {
+      merchantList: state.merchantList,
+      themeList: theme,
+      pageList: page,
+      merchantValue: merchantCode,
+      themeValue: 'thm001',
+      pageValue: 'page01',
+    };
 
-      case THEME_CHANGED:
-        console.log(action.value);
-        console.log('reducer >>> themeChanged: ', state);
-        return {...state, themeCode: action.value};
-    }
+    dispatch({type: MERCHANT_CHANGED, payload: data});
   };
 
-  const [state, dispatch] = useReducer(reducer, {
-    merchantCode: 'mrc001',
-    themeCode: 'thm001',
-    pageName: 'page01',
-  });
-
-  const merchantChanged = merchantCode => {
-    console.log('merchantCode: ', merchantCode);
-    dispatch({type: MERCHANT_CHANGED, value: merchantCode});
+  const themeChanged = async themeCode => {
+    const page = await getPageList(state.merchantValue, themeCode);
+    const data = {
+      merchantList: state.merchantList,
+      themeList: state.themeList,
+      pageList: page,
+      merchantValue: state.merchantValue,
+      themeValue: themeCode,
+      pageValue: 'page01',
+    };
+    dispatch({type: THEME_CHANGED, payload: data});
   };
 
-  const themeChanged = themeCode => {
-    console.log('themeChanged: ', themeCode);
-    dispatch({type: THEME_CHANGED, value: themeCode});
+  const pageChanged = async pageCode => {
+    const page = pageCode;
+
+    dispatch({type: PAGE_CHANGED, payload: page});
   };
 
   useEffect(() => {
-    getMerchantList().then(() => {
-      return getThemeList('mrc001');
-    });
+    const initList = async () => {
+      const merchant = await getMerchantList();
+      const theme = await getThemeList('mrc001');
+      const page = await getPageList('mrc001', 'thm001');
+
+      const data = {
+        merchantList: merchant,
+        themeList: theme,
+        pageList: page,
+        merchantValue: 'mrc001',
+        themeValue: 'thm001',
+        pageValue: 'page01',
+      };
+      dispatch({type: INIT_DATA, data: data});
+    };
+    initList();
   }, []);
 
+  const createHintObject = () => {
+    const hintObject = {
+      merchantCode: state.merchantValue,
+      themeCode: state.themeValue,
+      pageName: state.pageValue,
+    };
+    setHintObject(hintObject);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.wrapperBox}>
         <View style={styles.content}>
           <Text style={styles.label}>가맹점</Text>
           <Dropdown
-            // state={'mrc001'}
+            selectValue={state.merchantValue}
+            objectList={state.merchantList}
             action={merchantChanged}
-            objectList={merchantList}
           />
         </View>
         <View style={styles.content}>
           <Text style={styles.label}>테마</Text>
           <Dropdown
-            // state={'thm001'}
+            selectValue={state.themeValue}
+            objectList={state.themeList}
             action={themeChanged}
-            objectList={themeList}
           />
         </View>
         <View style={styles.content}>
           <Pressable
             onPress={() => {
-              // setMerchant(state.merchantCode);
-              // setTheme(themeValue);
-              navigation.navigate('Home');
+              // setMerchant(state.merchantValue)
+              // setTheme(state.themeValue)
+              // navigation.navigate('Home');
             }}
             style={styles.button}>
             <Text style={styles.textInButton}>저장</Text>
@@ -105,11 +139,11 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
       <View style={styles.wrapperBox}>
         <View style={styles.content}>
           <Text style={styles.label}>Page</Text>
-          {/* <Dropdown
-            state={pageValue}
-            setState={setPageValue}
-            objectList={pageList}
-          /> */}
+          <Dropdown
+            selectValue={state.pageValue}
+            objectList={state.pageList}
+            action={pageChanged}
+          />
         </View>
         <View style={styles.content}>
           <Pressable
