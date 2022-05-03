@@ -1,4 +1,11 @@
-import {Pressable, StyleSheet, Text, Vibration, View} from 'react-native';
+import {
+  LogBox,
+  Pressable,
+  StyleSheet,
+  Text,
+  Vibration,
+  View,
+} from 'react-native';
 import React, {useEffect, useState, useReducer} from 'react';
 import Dropdown from '../components/Dropdown';
 import {getData} from '../util/util';
@@ -9,6 +16,7 @@ import {
   THEME_CHANGED,
   PAGE_CHANGED,
 } from '../util/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -25,11 +33,12 @@ export const reducer = (state, action) => {
   }
 };
 
-const Setting = ({setMerchant, setTheme, navigation}) => {
+const Setting = ({navigation, route}) => {
+  LogBox.ignoreAllLogs();
+  const setThemeName = route.params.setThemeName;
+
   const [modalVisible, setModalVisible] = useState(false);
-
   const [hintObject, setHintObject] = useState({});
-
   const [state, dispatch] = useReducer(reducer, {});
 
   const getMerchantList = async () => {
@@ -97,6 +106,46 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
     initList();
   }, []);
 
+  const getHintList = async () => {
+    return await getData(
+      `/hintCode/${state.merchantValue}/${state.themeValue}`,
+    );
+  };
+
+  const storeHintList = async () => {
+    const hintList = JSON.stringify(await getHintList());
+    try {
+      await AsyncStorage.setItem('hintList', hintList);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getThemeName = async () => {
+    const themeName = await getData(
+      `/themes/${state.merchantValue}/${state.themeValue}`,
+    );
+    setThemeName(themeName);
+    return themeName;
+  };
+
+  const storeThemeName = async () => {
+    const themeName = JSON.stringify(await getThemeName());
+    try {
+      await AsyncStorage.setItem('themeName', themeName);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const storeHintCount = async () => {
+    try {
+      await AsyncStorage.setItem('hintCount', '0');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const createHintObject = () => {
     const hintObject = {
       merchantCode: state.merchantValue,
@@ -127,9 +176,16 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
         <View style={styles.content}>
           <Pressable
             onPress={() => {
-              // setMerchant(state.merchantValue)
-              // setTheme(state.themeValue)
-              // navigation.navigate('Home');
+              storeHintCount()
+                .then(() => {
+                  return storeHintList();
+                })
+                .then(() => {
+                  return storeThemeName();
+                })
+                .then(() => {
+                  navigation.navigate('Home');
+                });
             }}
             style={styles.button}>
             <Text style={styles.textInButton}>저장</Text>
@@ -150,7 +206,7 @@ const Setting = ({setMerchant, setTheme, navigation}) => {
             onPress={() => {
               Vibration.vibrate(200, false);
               setModalVisible(!modalVisible);
-              // createHintObject();
+              createHintObject();
             }}
             style={styles.button}>
             <Text style={styles.textInButton}>태그쓰기</Text>

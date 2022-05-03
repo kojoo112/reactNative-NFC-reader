@@ -10,14 +10,12 @@ import {LogBox} from 'react-native';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [merchant, setMerchant] = useState('');
-  const [theme, setTheme] = useState('');
-
   LogBox.ignoreAllLogs();
 
   useEffect(() => {
     SplashScreen.hide();
   });
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -25,11 +23,7 @@ const App = () => {
         initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="TagView" component={TagView} />
-        <Stack.Screen name="Setting">
-          {props => (
-            <Setting {...props} setMerchant={setMerchant} setTheme={setTheme} />
-          )}
-        </Stack.Screen>
+        <Stack.Screen name="Setting" component={Setting} />
       </Stack.Navigator>
     </NavigationContainer>
   );
