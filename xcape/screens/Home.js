@@ -9,12 +9,14 @@ import {
   Vibration,
   Alert,
 } from 'react-native';
-import {firebase} from '@react-native-firebase/database';
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NfcRead from '../components/NfcRead';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({navigation}) => {
+  const [hintList, setHintList] = useState({});
+  const [themeName, setThemeName] = useState('');
   const [hintKey, setHintKey] = useState('');
   const [hintCount, setHintCount] = useState(0);
   const [hintMessage1, setHintMessage1] = useState('');
@@ -23,28 +25,63 @@ const Home = ({navigation}) => {
   const [components, setComponents] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const getHint = hintKey => {
-    Vibration.vibrate(100, false);
-    if (hintKey !== '') {
-      firebase
-        .app()
-        .database(
-          'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
-        )
-        .ref(`/hintCode/mrc003/thm003/${hintKey}`)
-        .once('value')
-        .then(snapshot => {
-          if (snapshot.val() === null) {
-            ToastAndroid.show('힌트키를 확인해 주세요.', ToastAndroid.SHORT);
-          } else {
-            setHintMessage1(snapshot.val().message1);
-            setHintMessage2(snapshot.val().message2);
-            setHintCount(hintCount + 1);
-            setHintVisible(false);
-          }
-        });
+  const getThemeName = async () => {
+    try {
+      const themeName = await AsyncStorage.getItem('themeName');
+      if (themeName !== null) {
+        setThemeName(JSON.parse(themeName));
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
+
+  const getHintList = async () => {
+    try {
+      const hintList = await AsyncStorage.getItem('hintList');
+      if (hintList !== null) {
+        setHintList(JSON.parse(hintList));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const storeHintCount = async () => {
+    await AsyncStorage.setItem('hintCount', JSON.stringify(hintCount + 1));
+  };
+
+  const getHint = hintKey => {
+    Vibration.vibrate(200, false);
+    if (hintKey !== '') {
+      const hint = hintList[hintKey];
+      if (hint !== undefined) {
+        storeHintCount().then(() => {
+          setHintMessage1(hint.message1);
+          setHintMessage2(hint.message2);
+          setHintCount(hintCount + 1);
+          setHintVisible(false);
+        });
+      } else {
+        ToastAndroid.show('힌트코 드를 확인해주세요.', ToastAndroid.SHORT);
+      }
+    }
+  };
+
+  const getHintCount = async () => {
+    try {
+      const hintCount = JSON.parse(await AsyncStorage.getItem('hintCount'));
+      setHintCount(hintCount);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    getHintList();
+    getThemeName();
+    getHintCount();
+  }, [themeName]);
 
   useEffect(() => {
     if (components.length > 0) {
@@ -54,7 +91,12 @@ const Home = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header hintCount={hintCount} setHintCount={setHintCount} />
+      <Header
+        themeName={themeName}
+        hintCount={hintCount}
+        setHintCount={setHintCount}
+        setThemeName={setThemeName}
+      />
       <View
         style={{
           flex: 0.085,
@@ -104,7 +146,7 @@ const Home = ({navigation}) => {
                 [
                   {
                     text: '좀 더 생각해본다.',
-                    onPress: () => console.log('아니라는데'),
+                    onPress: () => {},
                     style: 'cancel',
                   },
                   {
