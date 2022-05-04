@@ -149,6 +149,7 @@ const Setting = ({navigation, route}) => {
 
   const storeUseHintList = async () => {
     try {
+      console.log('저장');
       await AsyncStorage.setItem('useHintList', '');
     } catch (e) {
       console.error(e);
