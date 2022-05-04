@@ -113,6 +113,7 @@ const Setting = ({navigation, route}) => {
   };
 
   const storeHintList = async () => {
+    // isSearch 추가
     const hintList = JSON.stringify(await getHintList());
     try {
       await AsyncStorage.setItem('hintList', hintList);
@@ -141,6 +142,14 @@ const Setting = ({navigation, route}) => {
   const storeHintCount = async () => {
     try {
       await AsyncStorage.setItem('hintCount', '0');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const storeUseHintList = async () => {
+    try {
+      await AsyncStorage.setItem('useHintList', '');
     } catch (e) {
       console.error(e);
     }
@@ -176,16 +185,18 @@ const Setting = ({navigation, route}) => {
         <View style={styles.content}>
           <Pressable
             onPress={() => {
-              storeHintCount()
-                .then(() => {
-                  return storeHintList();
-                })
-                .then(() => {
-                  return storeThemeName();
-                })
-                .then(() => {
-                  navigation.navigate('Home');
-                });
+              storeUseHintList().then(() => {
+                storeHintCount()
+                  .then(() => {
+                    return storeHintList();
+                  })
+                  .then(() => {
+                    return storeThemeName();
+                  })
+                  .then(() => {
+                    navigation.navigate('Home');
+                  });
+              });
             }}
             style={styles.button}>
             <Text style={styles.textInButton}>저장</Text>

@@ -3,8 +3,10 @@ import {View, Text, Image, Pressable, StyleSheet} from 'react-native';
 import Modal from 'react-native-modal';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {getData} from '../util/util';
+import {useNavigation} from '@react-navigation/native';
 
 const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
+  const navigation = useNavigation();
   const [hintCode, setHintCode] = useState('');
 
   const readTag = async () => {
@@ -33,6 +35,7 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
       await NfcManager.requestTechnology(NfcTech.Ndef);
       const bytes = Ndef.encodeMessage([
         Ndef.textRecord(JSON.stringify(object)),
+        Ndef.androidApplicationRecord('com.xcape'),
       ]);
       if (bytes) {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
@@ -61,11 +64,13 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
       const pageName = hintCode.pageName;
 
       const url = `/hintImage/${merchantCode}/${themeCode}/${pageName}/components`;
-      await getData(url, hintObject);
+      return await getData(url);
     };
 
     if (hintCode !== '') {
-      getComponents();
+      getComponents().then(res => {
+        navigation.navigate('TagView', {components: res});
+      });
     }
   }, [hintCode]);
 
