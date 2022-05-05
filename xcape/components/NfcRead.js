@@ -63,7 +63,7 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
       const themeCode = hintCode.themeCode;
       const pageName = hintCode.pageName;
 
-      const url = `/hintImage/${merchantCode}/${themeCode}/${pageName}/components`;
+      const url = `/tagView/${merchantCode}/${themeCode}/${pageName}/components`;
       return await getData(url);
     };
 

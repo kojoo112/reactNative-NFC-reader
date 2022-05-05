@@ -50,7 +50,7 @@ const Setting = ({navigation, route}) => {
   };
 
   const getPageList = async (merchantCode, themeCode) => {
-    return await getData(`/hintImage/${merchantCode}/${themeCode}`, false);
+    return await getData(`/tagView/${merchantCode}/${themeCode}`, false);
   };
 
   const merchantChanged = async merchantCode => {
@@ -149,7 +149,6 @@ const Setting = ({navigation, route}) => {
 
   const storeUseHintList = async () => {
     try {
-      console.log('저장');
       await AsyncStorage.setItem('useHintList', '');
     } catch (e) {
       console.error(e);
