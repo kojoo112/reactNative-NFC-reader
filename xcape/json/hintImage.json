@@ -2,7 +2,8 @@
   "mrc001": {
     "thm001": {
       "page01": {
-        "components": [
+        "components"://
+        [
           {
             "component": "ImageView",
             "url": "https://i.ibb.co/sg720jH/Page1.png"
