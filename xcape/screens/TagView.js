@@ -3,15 +3,18 @@ import React from 'react';
 import ImageView from '../components/ImageView';
 import VideoView from '../components/VideoView';
 import AudioView from '../components/AudioView';
+import PasswordTagView from '../components/PasswordTagView';
 
 const componentList = {
   ImageView: ImageView,
   VideoView: VideoView,
   AudioView: AudioView,
+  PasswordTagView: PasswordTagView,
 };
 
 const TagView = props => {
   const components = props.route.params.components;
+  console.log(components);
 
   // @Test
   // const components = [
