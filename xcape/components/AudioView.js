@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Sound from 'react-native-sound';
-import ImageView from './ImageView';
 
 // 음성파일 props {1}
 // audioInit함수 require 하드코딩 수정 {2}
@@ -56,41 +55,34 @@ const AudioView = props => {
   };
 
   return (
-    <View>
-      <ImageBackground
-        source={{uri: props.url}}
-        style={styles.backgroundImage}
-        resizeMode={'stretch'}>
+    <View style={styles.backgroundImage}>
+      <View style={{backgroundColor: 'black'}}>
         {audioFlag ? (
-          <Image
-            source={tapeImage}
-            style={styles.tape}
-            resizeMode={'stretch'}
-          />
+          <Image source={tapeImage} style={styles.tape} resizeMode={'cover'} />
         ) : (
           <Image
             source={tapePlayImage}
             style={styles.tape}
-            resizeMode={'stretch'}
+            resizeMode={'cover'}
           />
         )}
-
-        <Image
+      </View>
+      <View style={{backgroundColor: 'red', height: 100}}>
+        <ImageBackground
           source={require('../assets/image/tape_template/controller.png')}
           style={styles.tapeController}
-          resizeMode={'stretch'}
+          resizeMode={'cover'}
         />
-      </ImageBackground>
-      {/* <ImageView url={props.url} /> */}
-      <TouchableOpacity
-        onPress={() => handleAudioFlag()}
-        style={{
-          position: 'absolute',
-          top: 285,
-          left: 204,
-          width: 60,
-          height: 90,
-        }}></TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleAudioFlag()}
+          style={{
+            position: 'absolute',
+            top: 34,
+            left: 210,
+            width: 60,
+            height: 70,
+          }}></TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -98,21 +90,14 @@ const AudioView = props => {
 const styles = StyleSheet.create({
   backgroundImage: {
     width: windowWidth,
-    height: windowHeight,
   },
   tape: {
-    position: 'absolute',
-    width: '89%',
-    height: '25%',
-    top: 77,
-    left: 20,
+    width: null,
+    height: 200,
   },
   tapeController: {
-    position: 'absolute',
-    width: '90%',
-    height: '10%',
-    top: 285,
-    left: 19,
+    width: null,
+    height: 100,
   },
 });
 
