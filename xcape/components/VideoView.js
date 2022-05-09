@@ -4,15 +4,18 @@ import Video from 'react-native-video';
 
 const testVideo = require('../assets/videos/test-video.mp4');
 
-const VideoView = () => {
+const VideoView = props => {
+  console.log(props.url);
   return (
     // <View style={styles.container}>
     <Video
-      // source={{
-      //   uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-      // }}
-      source={testVideo}
-      //   style={styles.backgroundVideo}
+      source={{
+        // uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+        uri: 'https://vimeo.com/706832745',
+        //uri: props.url,
+      }}
+      // source={testVideo}
+      style={styles.backgroundVideo}
       resizeMode={'contain'}
       controls={true}
     />
@@ -28,11 +31,12 @@ var styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    flex: 1,
+    // position: 'absolute',
+    width: 300,
+    height: 300,
+    // top: 150,
+    // left: 30,
   },
 });
 
