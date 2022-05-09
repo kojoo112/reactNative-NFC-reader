@@ -19,7 +19,8 @@ const VideoView = props => {
       resizeMode={'contain'}
       controls={true}
     />
-    // {/* </View> */}
+
+    // </View>
   );
 };
 

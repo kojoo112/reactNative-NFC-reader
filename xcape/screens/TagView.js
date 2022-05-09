@@ -25,7 +25,11 @@ const TagView = props => {
     <ScrollView>
       {components.map((element, idx) => {
         const Component = componentList[element.component];
-        return <Component key={idx} url={element.url} />;
+        if (element.answer) {
+          return <Component key={idx} answer={element.answer} />;
+        } else {
+          return <Component key={idx} url={element.url} />;
+        }
       })}
     </ScrollView>
   );

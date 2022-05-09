@@ -4,10 +4,11 @@ import React, {useState, useEffect} from 'react';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const ImageView = url => {
+const ImageView = props => {
   const [ratio, setRatio] = useState(0);
-  const [imageUrl, setImageUrl] = useState(url.url);
+  const [imageUrl, setImageUrl] = useState(props.url);
 
+  console.log('imageView', props.url);
   const getImageSize = () => {
     Image.getSize(imageUrl, (width, height) => {
       setRatio(width / height);
@@ -32,8 +33,6 @@ const ImageView = url => {
         ]}
         resizeMode={'stretch'}
         source={{uri: imageUrl}}></Image>
-      {/* // source={require('../assets/image/Page10.png')}></Image>
-    // source={{uri: 'https://i.ibb.co/ChM2yLJ/Page10.png'}}></Image> */}
     </View>
   );
 };
