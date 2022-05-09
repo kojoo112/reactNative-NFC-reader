@@ -159,10 +159,6 @@ const Home = ({navigation}) => {
             onPress={() => {
               Keyboard.dismiss();
               getHint(hintKey);
-            }}
-            onLongPress={() => {
-              Vibration.vibrate(200, false);
-              setModalVisible(!modalVisible);
             }}>
             <Icon name="search-sharp" size={24} color={'white'} />
           </Pressable>
@@ -209,6 +205,14 @@ const Home = ({navigation}) => {
             )}
           </Pressable>
         </View>
+        <Pressable
+          style={styles.tagButton}
+          onPress={() => {
+            Vibration.vibrate(200, false);
+            setModalVisible(!modalVisible);
+          }}>
+          <Text style={{fontSize: 20}}>NFC 태그</Text>
+        </Pressable>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -260,6 +264,16 @@ const styles = StyleSheet.create({
   hintMessage: {
     color: 'white',
     fontSize: 16,
+  },
+  tagButton: {
+    flex: 0.1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#333a44',
+    borderWidth: 1.5,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    borderColor: 'white',
   },
 });
 
