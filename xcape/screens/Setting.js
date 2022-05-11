@@ -21,7 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const reducer = (state, action) => {
   switch (action.type) {
     case INIT_DATA:
-      return action.data;
+      return {...action.payload};
     case MERCHANT_CHANGED:
       return {...action.payload};
     case THEME_CHANGED:
@@ -101,7 +101,7 @@ const Setting = ({navigation, route}) => {
         themeValue: 'thm001',
         pageValue: 'page01',
       };
-      dispatch({type: INIT_DATA, data: data});
+      dispatch({type: INIT_DATA, payload: data});
     };
     initList();
   }, []);

@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const storeSetThemeName = async () => {
   const themeName = JSON.stringify(await getThemeName());
   try {
-    await AsyncStoragege.setItem('themeName', themeName);
+    await AsyncStorage.setItem('themeName', themeName);
   } catch (e) {
     console.error(e);
   }
