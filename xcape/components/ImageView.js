@@ -8,7 +8,6 @@ const ImageView = props => {
   const [ratio, setRatio] = useState(0);
   const [imageUrl, setImageUrl] = useState(props.url);
 
-  console.log('imageView', props.url);
   const getImageSize = () => {
     Image.getSize(imageUrl, (width, height) => {
       setRatio(width / height);
