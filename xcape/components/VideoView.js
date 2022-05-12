@@ -12,8 +12,10 @@ import Video from 'react-native-video';
 import PlayerControls from './/PlayerControls';
 import ProgressBar from './/ProgressBar';
 
-const VideoView = () => {
+const VideoView = ({url}) => {
   const videoRef = useRef(null);
+  const [videoUrl, setVideoUrl] = useState(url);
+
   const [state, setState] = useState({
     fullscreen: false,
     play: false,
@@ -111,9 +113,6 @@ const VideoView = () => {
         <View>
           <Video
             ref={videoRef}
-            source={{
-              uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-            }}
             style={state.fullscreen ? styles.fullscreenVideo : styles.video}
             controls={false}
             resizeMode={'contain'}
@@ -121,6 +120,9 @@ const VideoView = () => {
             onProgress={onProgress}
             onEnd={onEnd}
             paused={!state.play}
+            source={{
+              uri: videoUrl,
+            }}
           />
           {state.showControls && (
             <View
