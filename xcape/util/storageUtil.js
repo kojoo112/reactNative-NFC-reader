@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 스토리지에 테마 이름 저장
-export const storeSetThemeName = async () => {
+export const storeSetThemeName = async getThemeName => {
   const themeName = JSON.stringify(await getThemeName());
   try {
     await AsyncStorage.setItem('themeName', themeName);
@@ -44,7 +44,7 @@ export const storeGetHintList = async setHintList => {
 };
 
 // 스토리지에 힌트 카운트 저장 (기존 : storeHintCount)
-export const storeSetHintCount = async () => {
+export const storeSetHintCount = async hintCount => {
   await AsyncStorage.setItem('hintCount', JSON.stringify(hintCount + 1));
 };
 // 스토리지에서 힌트 카운트 가져오기 (기존 : getHintCount)
@@ -58,7 +58,7 @@ export const storeGetHintCount = async setHintCount => {
 };
 
 // 스토리지에 사용한 힌트 리스트 저장 (기존 : storeUseHintList)
-export const storeSetUseHintList = async hintKey => {
+export const storeSetUseHintList = async (useHintList, hintKey) => {
   const newHintList = {...useHintList, hintKey};
   await AsyncStorage.setItem('useHintList', JSON.stringify(newHintList));
 };
