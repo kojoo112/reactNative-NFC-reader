@@ -14,7 +14,14 @@ import {
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NfcRead from '../components/NfcRead';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  storeSetUseHintList,
+  storeSetHintCount,
+  storeGetThemeName,
+  storeGetHintList,
+  storeGetHintCount,
+  storeGetUseHintList,
+} from '../util/storageUtil';
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
@@ -33,60 +40,6 @@ const Home = ({navigation}) => {
     setHintKey(text.toUpperCase());
   };
 
-  const getThemeName = async () => {
-    try {
-      const themeName = await AsyncStorage.getItem('themeName');
-      if (themeName !== null) {
-        setThemeName(JSON.parse(themeName));
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const getHintList = async () => {
-    try {
-      const hintList = await AsyncStorage.getItem('hintList');
-      if (hintList !== null) {
-        setHintList(JSON.parse(hintList));
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const getUseHintList = async () => {
-    try {
-      const useHintList = await AsyncStorage.getItem('useHintList');
-      if (useHintList !== null) {
-        const getuseHintList = Object.values(JSON.parse(useHintList));
-        setUseHintList(getuseHintList);
-      } else {
-        setUseHintList([]);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const getHintCount = async () => {
-    try {
-      const hintCount = JSON.parse(await AsyncStorage.getItem('hintCount'));
-      setHintCount(hintCount);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const storeHintCount = async () => {
-    await AsyncStorage.setItem('hintCount', JSON.stringify(hintCount + 1));
-  };
-
-  const storeUseHintList = async hintKey => {
-    const newHintList = {...useHintList, hintKey};
-    await AsyncStorage.setItem('useHintList', JSON.stringify(newHintList));
-  };
-
   const getHint = hintKey => {
     Vibration.vibrate(200, false);
     if (hintKey !== '') {
@@ -96,8 +49,8 @@ const Home = ({navigation}) => {
         setHintMessage2(hint.message2);
         setHintVisible(false);
       } else if (hint !== undefined) {
-        storeUseHintList(hintKey).then(() => {
-          storeHintCount(hintKey).then(() => {
+        storeSetUseHintList(useHintList, hintKey).then(() => {
+          storeSetHintCount(hintCount).then(() => {
             setHintMessage1(hint.message1);
             setHintMessage2(hint.message2);
             setHintCount(hintCount + 1);
@@ -112,10 +65,10 @@ const Home = ({navigation}) => {
   };
 
   useEffect(() => {
-    getHintList();
-    getThemeName();
-    getHintCount();
-    getUseHintList();
+    storeGetHintList(setHintList);
+    storeGetThemeName(setThemeName);
+    storeGetHintCount(setHintCount);
+    storeGetUseHintList(setUseHintList);
     setHintKey('');
     setHintMessage1('');
     setHintMessage2('');
