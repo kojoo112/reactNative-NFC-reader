@@ -1,52 +1,32 @@
 import {NavigationContainer} from '@react-navigation/native';
-import React, {useEffect} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Home from './screens/Home.js';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HintPage from './screens/HintPage.js';
-import VideoPage from './screens/VideoPage.js';
 import SplashScreen from 'react-native-splash-screen';
-import {firebase} from '@react-native-firebase/database';
+import Setting from './screens/Setting.js';
+import TagView from './screens/TagView.js';
+import {LogBox} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
-firebase
-  .app()
-  .database(
-    'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
-  )
-  .ref('/mrc001/thm001')
-  .once('value')
-  .then(snapshot => {
-    console.log(snapshot.val());
-  });
-
 const App = () => {
+  LogBox.ignoreAllLogs();
+
   useEffect(() => {
     SplashScreen.hide();
   });
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
         initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="HintPage" component={HintPage} />
-        <Stack.Screen name="VideoPage" component={VideoPage} />
+        <Stack.Screen name="TagView" component={TagView} />
+        <Stack.Screen name="Setting" component={Setting} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-  },
-});
 
 export default App;
