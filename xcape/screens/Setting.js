@@ -23,7 +23,7 @@ import {
   storeSetThemeName,
 } from '../util/storageUtil';
 
-const reducer = (state, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case INIT_DATA:
       return {...action.payload};
