@@ -3,7 +3,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import prompt from 'react-native-prompt-android';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {storeInitHintCount, storeInitUseHintList} from '../util/storageUtil';
 
 const Header = ({
   hintCount,
@@ -13,22 +13,6 @@ const Header = ({
   setUseHintList,
 }) => {
   const navigation = useNavigation();
-
-  const storeHintCount = async () => {
-    try {
-      await AsyncStorage.setItem('hintCount', '0');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const storeUseHintList = async () => {
-    try {
-      await AsyncStorage.setItem('useHintList', '');
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -83,8 +67,8 @@ const Header = ({
                   text: 'OK',
                   onPress: password => {
                     if (password == '5772') {
-                      storeHintCount();
-                      storeUseHintList();
+                      storeInitHintCount();
+                      storeInitUseHintList();
                       setHintCount(0);
                       setUseHintList([]);
                     }
