@@ -18,7 +18,7 @@ import {
 } from '../util/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const reducer = (state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case INIT_DATA:
       return action.data;
