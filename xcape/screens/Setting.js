@@ -16,12 +16,17 @@ import {
   THEME_CHANGED,
   PAGE_CHANGED,
 } from '../util/constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  storeInitHintCount,
+  storeInitUseHintList,
+  storeSetHintList,
+  storeSetThemeName,
+} from '../util/storageUtil';
 
 const reducer = (state, action) => {
   switch (action.type) {
     case INIT_DATA:
-      return action.data;
+      return {...action.payload};
     case MERCHANT_CHANGED:
       return {...action.payload};
     case THEME_CHANGED:
@@ -101,7 +106,7 @@ const Setting = ({navigation, route}) => {
         themeValue: 'thm001',
         pageValue: 'page01',
       };
-      dispatch({type: INIT_DATA, data: data});
+      dispatch({type: INIT_DATA, payload: data});
     };
     initList();
   }, []);
@@ -112,47 +117,12 @@ const Setting = ({navigation, route}) => {
     );
   };
 
-  const storeHintList = async () => {
-    // isSearch 추가
-    const hintList = JSON.stringify(await getHintList());
-    try {
-      await AsyncStorage.setItem('hintList', hintList);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const getThemeName = async () => {
     const themeName = await getData(
       `/themes/${state.merchantValue}/${state.themeValue}`,
     );
     setThemeName(themeName);
     return themeName;
-  };
-
-  const storeThemeName = async () => {
-    const themeName = JSON.stringify(await getThemeName());
-    try {
-      await AsyncStorage.setItem('themeName', themeName);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const storeHintCount = async () => {
-    try {
-      await AsyncStorage.setItem('hintCount', '0');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const storeUseHintList = async () => {
-    try {
-      await AsyncStorage.setItem('useHintList', '');
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   const createHintObject = () => {
@@ -185,13 +155,13 @@ const Setting = ({navigation, route}) => {
         <View style={styles.content}>
           <Pressable
             onPress={() => {
-              storeUseHintList().then(() => {
-                storeHintCount()
+              storeInitUseHintList().then(() => {
+                storeInitHintCount()
                   .then(() => {
-                    return storeHintList();
+                    return storeSetHintList(getHintList);
                   })
                   .then(() => {
-                    return storeThemeName();
+                    return storeSetThemeName(getThemeName);
                   })
                   .then(() => {
                     navigation.navigate('Home');

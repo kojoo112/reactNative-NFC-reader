@@ -14,15 +14,12 @@ const componentList = {
 
 const TagView = props => {
   const components = props.route.params.components;
-  console.log(components);
+
 
   return (
     <ScrollView>
       {components.map((element, idx) => {
         const Component = componentList[element.component];
-<<<<<<< Updated upstream
-        return <Component key={idx} url={element.url} />;
-=======
         if (element.answer) {
           return (
             <Component
@@ -34,7 +31,6 @@ const TagView = props => {
         } else {
           return <Component key={idx} url={element.url} />;
         }
->>>>>>> Stashed changes
       })}
     </ScrollView>
   );
