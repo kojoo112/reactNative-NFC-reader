@@ -29,7 +29,8 @@
     "react-native-sound": "^0.11.2",
     "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^9.1.0",
-    "react-native-video": "^5.2.0"
+    "react-native-video": "^5.2.0",
+    "react-native-vision-camera": "^2.13.3"
   },
   "devDependencies": {
     "@babel/core": "7.17.9",
