@@ -9,7 +9,7 @@ import {
 import React, {useEffect, useState, useReducer} from 'react';
 import Dropdown from '../components/Dropdown';
 import {getData} from '../util/util';
-import NfcRead from '../components/NfcRead';
+import TagRead from '../components/TagRead';
 import {
   INIT_DATA,
   MERCHANT_CHANGED,
@@ -194,7 +194,7 @@ const Setting = ({navigation, route}) => {
           </Pressable>
         </View>
       </View>
-      <NfcRead
+      <TagRead
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         action={'writeTag'}

@@ -5,7 +5,7 @@ import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {getData} from '../util/util';
 import {useNavigation} from '@react-navigation/native';
 
-const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
+const TagRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   const navigation = useNavigation();
   const [hintCode, setHintCode] = useState('');
 
@@ -14,11 +14,11 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
       await NfcManager.requestTechnology([NfcTech.Ndef]);
       const tag = await NfcManager.getTag();
       tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
-      await setHintCode(
+      setHintCode(
         JSON.parse(Ndef.text.decodePayload(tag.ndefMessage[0].payload)),
       );
     } catch (ex) {
-      console.log('NfcRead >>> readTag >>> : ', ex);
+      console.log('TagRead >>> readTag >>> : ', ex);
     } finally {
       closeModal();
     }
@@ -41,7 +41,7 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
       }
     } catch (ex) {
-      console.log('NfcRead >>> writeTag >>> : ', ex);
+      console.log('TagRead >>> writeTag >>> : ', ex);
     } finally {
       closeModal();
     }
@@ -75,20 +75,21 @@ const NfcRead = ({modalVisible, setModalVisible, action, hintObject}) => {
 
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onShow={tagDevide[action]}
-      onRequestClose={() => {
+      onBackdropPress={() => {
         closeModal();
-      }}>
+      }}
+      onBackButtonPress={() => {
+        closeModal();
+      }}
+      isVisible={modalVisible}
+      onShow={tagDevide[action]}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Image
             style={styles.modalImage}
-            source={require('../assets/image/nfcRead.png')}
+            source={require('../assets/image/xcape-logo.png')}
           />
-          <Text style={styles.modalText}>태그를 해주세요</Text>
+
           <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => {
@@ -111,7 +112,9 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'white',
+    backgroundColor: '#1f1f1f',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     width: '85%',
   },
   modalImage: {
-    backgroundColor: 'white',
+    backgroundColor: '#1f1f1f',
     marginBottom: 15,
     width: 200,
     height: 200,
@@ -143,13 +146,13 @@ const styles = StyleSheet.create({
     width: 100,
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#feb50d',
   },
   textStyle: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
     textAlign: 'center',
   },
 });
 
-export default NfcRead;
+export default TagRead;
