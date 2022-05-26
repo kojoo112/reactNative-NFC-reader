@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
-import NfcRead from '../components/NfcRead';
+import TagRead from '../components/TagRead';
 import {
   storeSetUseHintList,
   storeSetHintCount,
@@ -116,7 +116,7 @@ const Home = ({navigation}) => {
             <Icon name="search-sharp" size={24} color={'white'} />
           </Pressable>
         </View>
-        <NfcRead
+        <TagRead
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           action={'readTag'}
@@ -158,14 +158,18 @@ const Home = ({navigation}) => {
             )}
           </Pressable>
         </View>
-        <Pressable
-          style={styles.tagButton}
-          onPress={() => {
-            Vibration.vibrate(200, false);
-            setModalVisible(!modalVisible);
-          }}>
-          <Text style={{fontSize: 20}}>NFC 태그</Text>
-        </Pressable>
+        <View style={{flex: 0.1, paddingHorizontal: 20, marginBottom: 10}}>
+          <Pressable
+            style={styles.tagButton}
+            onPress={() => {
+              Vibration.vibrate(200, false);
+              setModalVisible(!modalVisible);
+            }}>
+            <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>
+              X-TAG
+            </Text>
+          </Pressable>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -219,11 +223,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   tagButton: {
-    flex: 0.1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#333a44',
-    borderWidth: 1.5,
+    backgroundColor: '#212429',
+    borderWidth: 1,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     borderColor: 'white',
