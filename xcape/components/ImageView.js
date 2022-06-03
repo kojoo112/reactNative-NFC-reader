@@ -21,26 +21,15 @@ const ImageView = props => {
   return (
     <View>
       <Image
-        style={[
-          ratio > 0.3
-            ? styles.hintImage
-            : {
-                width: '100%',
-                height: undefined,
-                aspectRatio: ratio,
-              },
-        ]}
-        resizeMode={'stretch'}
+        style={{
+          width: '100%',
+          height: undefined,
+          aspectRatio: ratio,
+        }}
+        resizeMode={'cover'}
         source={{uri: imageUrl}}></Image>
     </View>
   );
 };
 
 export default ImageView;
-
-const styles = StyleSheet.create({
-  hintImage: {
-    width: windowWidth,
-    height: windowHeight,
-  },
-});
