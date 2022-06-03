@@ -90,7 +90,6 @@ const Home = ({navigation}) => {
           themeName={themeName}
           hintCount={hintCount}
           setHintCount={setHintCount}
-          setThemeName={setThemeName}
           setUseHintList={setUseHintList}
           setNfcTimeDelay={setNfcTimeDelay}
           isRefresh={isRefresh}
