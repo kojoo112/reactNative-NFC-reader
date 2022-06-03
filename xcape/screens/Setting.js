@@ -40,7 +40,6 @@ export const reducer = (state, action) => {
 
 const Setting = ({navigation, route}) => {
   LogBox.ignoreAllLogs();
-  const setThemeName = route.params.setThemeName;
   const isRefresh = route.params.isRefresh;
   const setIsRefresh = route.params.setIsRefresh;
 
@@ -123,7 +122,6 @@ const Setting = ({navigation, route}) => {
     const themeName = await getData(
       `/themes/${state.merchantValue}/${state.themeValue}`,
     );
-    setThemeName(themeName);
     return themeName;
   };
 
@@ -157,7 +155,6 @@ const Setting = ({navigation, route}) => {
         <View style={styles.content}>
           <Pressable
             onPress={() => {
-              setIsRefresh(isRefresh => !isRefresh);
               storeInitUseHintList().then(() => {
                 storeInitHintCount()
                   .then(() => {
@@ -167,6 +164,7 @@ const Setting = ({navigation, route}) => {
                     return storeSetThemeName(getThemeName);
                   })
                   .then(() => {
+                    setIsRefresh(!isRefresh);
                     navigation.navigate('Home');
                   });
               });

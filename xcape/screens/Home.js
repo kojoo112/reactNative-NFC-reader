@@ -90,7 +90,6 @@ const Home = ({navigation}) => {
           themeName={themeName}
           hintCount={hintCount}
           setHintCount={setHintCount}
-          setThemeName={setThemeName}
           setUseHintList={setUseHintList}
           setNfcTimeDelay={setNfcTimeDelay}
           isRefresh={isRefresh}
@@ -177,12 +176,6 @@ const Home = ({navigation}) => {
             <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>
               X-TAG
             </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              console.log(hintList);
-            }}>
-            <Text>asdf</Text>
           </Pressable>
         </View>
       </View>
