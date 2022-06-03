@@ -11,6 +11,8 @@ const Header = ({
   setHintCount,
   setThemeName,
   setUseHintList,
+  isRefresh,
+  setIsRefresh,
 }) => {
   const navigation = useNavigation();
 
@@ -35,6 +37,8 @@ const Header = ({
                   if (password == '5772') {
                     navigation.navigate('Setting', {
                       setThemeName: setThemeName,
+                      isRefresh: isRefresh,
+                      setIsRefresh: setIsRefresh,
                     });
                   }
                 },
