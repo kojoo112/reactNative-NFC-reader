@@ -177,12 +177,6 @@ const Home = ({navigation}) => {
               X-TAG
             </Text>
           </Pressable>
-          <Pressable
-            onPress={() => {
-              console.log(hintList);
-            }}>
-            <Text>asdf</Text>
-          </Pressable>
         </View>
       </View>
     </TouchableWithoutFeedback>
