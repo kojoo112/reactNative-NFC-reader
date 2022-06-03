@@ -11,6 +11,7 @@ const Header = ({
   setHintCount,
   setThemeName,
   setUseHintList,
+  setNfcTimeDelay,
 }) => {
   const navigation = useNavigation();
 
@@ -35,6 +36,7 @@ const Header = ({
                   if (password == '5772') {
                     navigation.navigate('Setting', {
                       setThemeName: setThemeName,
+                      setNfcTimeDelay: setNfcTimeDelay,
                     });
                   }
                 },

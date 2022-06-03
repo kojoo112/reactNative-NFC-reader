@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {Dimensions} from 'react-native';

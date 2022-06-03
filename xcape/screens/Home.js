@@ -34,6 +34,7 @@ const Home = ({navigation}) => {
   const [components, setComponents] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [useHintList, setUseHintList] = useState([]);
+  const [nfcTimeDelay, setNfcTimeDelay] = useState(true);
 
   const handleTextChange = e => {
     const {text} = e.nativeEvent;
@@ -90,6 +91,7 @@ const Home = ({navigation}) => {
           setHintCount={setHintCount}
           setThemeName={setThemeName}
           setUseHintList={setUseHintList}
+          setNfcTimeDelay={setNfcTimeDelay}
         />
         <View
           style={{
@@ -121,6 +123,7 @@ const Home = ({navigation}) => {
           setModalVisible={setModalVisible}
           action={'readTag'}
           hintObject={setComponents}
+          setNfcTimeDelay={setNfcTimeDelay}
         />
         <View style={styles.hintView}>
           <View style={styles.hintBoxStyle}>
@@ -162,8 +165,11 @@ const Home = ({navigation}) => {
           <Pressable
             style={styles.tagButton}
             onPress={() => {
-              Vibration.vibrate(200, false);
-              setModalVisible(!modalVisible);
+              if (nfcTimeDelay) {
+                setNfcTimeDelay(false);
+                Vibration.vibrate(200, false);
+                setModalVisible(!modalVisible);
+              }
             }}>
             <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>
               X-TAG
