@@ -12,6 +12,8 @@ const Header = ({
   setThemeName,
   setUseHintList,
   setNfcTimeDelay,
+  isRefresh,
+  setIsRefresh,
 }) => {
   const navigation = useNavigation();
 
@@ -37,6 +39,8 @@ const Header = ({
                     navigation.navigate('Setting', {
                       setThemeName: setThemeName,
                       setNfcTimeDelay: setNfcTimeDelay,
+                      isRefresh: isRefresh,
+                      setIsRefresh: setIsRefresh,
                     });
                   }
                 },

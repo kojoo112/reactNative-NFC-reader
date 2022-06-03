@@ -35,6 +35,7 @@ const Home = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [useHintList, setUseHintList] = useState([]);
   const [nfcTimeDelay, setNfcTimeDelay] = useState(true);
+  const [isRefresh, setIsRefresh] = useState(false);
 
   const handleTextChange = e => {
     const {text} = e.nativeEvent;
@@ -74,7 +75,7 @@ const Home = ({navigation}) => {
     setHintMessage1('');
     setHintMessage2('');
     setHintVisible(false);
-  }, [themeName]);
+  }, [isRefresh]);
 
   useEffect(() => {
     if (components.length > 0) {
@@ -92,6 +93,8 @@ const Home = ({navigation}) => {
           setThemeName={setThemeName}
           setUseHintList={setUseHintList}
           setNfcTimeDelay={setNfcTimeDelay}
+          isRefresh={isRefresh}
+          setIsRefresh={setIsRefresh}
         />
         <View
           style={{
@@ -174,6 +177,12 @@ const Home = ({navigation}) => {
             <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>
               X-TAG
             </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              console.log(hintList);
+            }}>
+            <Text>asdf</Text>
           </Pressable>
         </View>
       </View>

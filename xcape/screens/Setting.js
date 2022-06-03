@@ -41,6 +41,8 @@ export const reducer = (state, action) => {
 const Setting = ({navigation, route}) => {
   LogBox.ignoreAllLogs();
   const setThemeName = route.params.setThemeName;
+  const isRefresh = route.params.isRefresh;
+  const setIsRefresh = route.params.setIsRefresh;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [hintObject, setHintObject] = useState({});
@@ -155,6 +157,7 @@ const Setting = ({navigation, route}) => {
         <View style={styles.content}>
           <Pressable
             onPress={() => {
+              setIsRefresh(isRefresh => !isRefresh);
               storeInitUseHintList().then(() => {
                 storeInitHintCount()
                   .then(() => {
