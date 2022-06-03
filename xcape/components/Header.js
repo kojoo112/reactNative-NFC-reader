@@ -11,6 +11,7 @@ const Header = ({
   setHintCount,
   setThemeName,
   setUseHintList,
+  setNfcTimeDelay,
   isRefresh,
   setIsRefresh,
 }) => {
@@ -37,6 +38,7 @@ const Header = ({
                   if (password == '5772') {
                     navigation.navigate('Setting', {
                       setThemeName: setThemeName,
+                      setNfcTimeDelay: setNfcTimeDelay,
                       isRefresh: isRefresh,
                       setIsRefresh: setIsRefresh,
                     });

@@ -1,11 +1,24 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, Pressable, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+  StyleSheet,
+  ToastAndroid,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {getData} from '../util/util';
 import {useNavigation} from '@react-navigation/native';
 
-const TagRead = ({modalVisible, setModalVisible, action, hintObject}) => {
+const TagRead = ({
+  modalVisible,
+  setModalVisible,
+  action,
+  hintObject,
+  setNfcTimeDelay,
+}) => {
   const navigation = useNavigation();
   const [hintCode, setHintCode] = useState('');
 
@@ -18,7 +31,8 @@ const TagRead = ({modalVisible, setModalVisible, action, hintObject}) => {
         JSON.parse(Ndef.text.decodePayload(tag.ndefMessage[0].payload)),
       );
     } catch (ex) {
-      console.log('TagRead >>> readTag >>> : ', ex);
+      console.log('NfcRead >>> readTag >>> : ', ex);
+      ToastAndroid.show('다시 시도해주세요.', ToastAndroid.LONG);
     } finally {
       closeModal();
     }
@@ -41,7 +55,8 @@ const TagRead = ({modalVisible, setModalVisible, action, hintObject}) => {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
       }
     } catch (ex) {
-      console.log('TagRead >>> writeTag >>> : ', ex);
+      console.log('NfcRead >>> writeTag >>> : ', ex);
+      ToastAndroid.show('다시 시도해주세요.', ToastAndroid.LONG);
     } finally {
       closeModal();
     }
@@ -53,8 +68,13 @@ const TagRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   };
 
   const closeModal = () => {
-    NfcManager.cancelTechnologyRequest();
-    setModalVisible(!modalVisible);
+    const result = NfcManager.cancelTechnologyRequest().then(res => {
+      if (res == true) {
+        console.log('!');
+        setNfcTimeDelay(true);
+        setModalVisible(!modalVisible);
+      }
+    });
   };
 
   useEffect(() => {
