@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {View, BackHandler} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {Dimensions} from 'react-native';
@@ -11,14 +11,21 @@ const CameraView = () => {
   useEffect(() => {
     const getPermission = async () => {
       const status = await Camera.requestCameraPermission();
-
       setHasPermission(status === 'authorized');
     };
 
+    const backAction = () => {
+      setIsActive(false);
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
     getPermission();
 
     return () => {
-      setIsActive(!isActive);
+      backHandler.remove();
     };
   }, []);
 

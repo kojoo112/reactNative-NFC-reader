@@ -12,13 +12,7 @@ import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {getData} from '../util/util';
 import {useNavigation} from '@react-navigation/native';
 
-const TagRead = ({
-  modalVisible,
-  setModalVisible,
-  action,
-  hintObject,
-  setNfcTimeDelay,
-}) => {
+const TagRead = ({modalVisible, setModalVisible, action, hintObject}) => {
   const navigation = useNavigation();
   const [hintCode, setHintCode] = useState('');
 
@@ -32,9 +26,10 @@ const TagRead = ({
       );
     } catch (ex) {
       console.log('NfcRead >>> readTag >>> : ', ex);
-      ToastAndroid.show('다시 시도해주세요.', ToastAndroid.LONG);
+      ToastAndroid.show('다시 시도해주세요.', ToastAndroid.SHORT);
     } finally {
-      closeModal();
+      NfcManager.cancelTechnologyRequest();
+      setModalVisible(false);
     }
   };
 
@@ -56,7 +51,7 @@ const TagRead = ({
       }
     } catch (ex) {
       console.log('NfcRead >>> writeTag >>> : ', ex);
-      ToastAndroid.show('다시 시도해주세요.', ToastAndroid.LONG);
+      ToastAndroid.show('다시 시도해주세요.', ToastAndroid.SHORT);
     } finally {
       closeModal();
     }
@@ -68,12 +63,8 @@ const TagRead = ({
   };
 
   const closeModal = () => {
-    const result = NfcManager.cancelTechnologyRequest().then(res => {
-      if (res == true) {
-        console.log('!');
-        setNfcTimeDelay(true);
-        setModalVisible(!modalVisible);
-      }
+    NfcManager.cancelTechnologyRequest().then(() => {
+      setModalVisible(!modalVisible);
     });
   };
 
