@@ -40,7 +40,6 @@ export const reducer = (state, action) => {
 
 const Setting = ({navigation, route}) => {
   LogBox.ignoreAllLogs();
-
   const isRefresh = route.params.isRefresh;
   const setIsRefresh = route.params.setIsRefresh;
 
