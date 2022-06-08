@@ -164,7 +164,7 @@ const Setting = ({navigation, route}) => {
                     return storeSetThemeName(getThemeName);
                   })
                   .then(() => {
-                    setIsRefresh(!isRefresh);
+                    setIsRefresh(isRefresh => !isRefresh);
                     navigation.navigate('Home');
                   });
               });
