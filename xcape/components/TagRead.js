@@ -98,7 +98,7 @@ const TagRead = ({modalVisible, setModalVisible, action, hintObject}) => {
         <View style={styles.modalView}>
           <Image
             style={styles.modalImage}
-            source={require('../assets/image/xcape-logo.png')}
+            source={require('../assets/images/xcape-logo.png')}
           />
 
           <Pressable
