@@ -1,5 +1,5 @@
 import {NavigationContainer} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Home from './screens/Home.js';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from 'react-native-splash-screen';
