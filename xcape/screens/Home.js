@@ -8,7 +8,6 @@ import {
   Pressable,
   ToastAndroid,
   Vibration,
-  Alert,
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -16,6 +15,7 @@ import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TagRead from '../components/TagRead';
 import Clock from '../components/Clock';
+import HintMessageView from '../components/HintMessageView';
 import {
   storeSetUseHintList,
   storeSetHintCount,
@@ -145,42 +145,12 @@ const Home = ({navigation}) => {
             hintObject={setComponents}
           />
         </View>
-        <View style={styles.hintView}>
-          <View style={styles.hintBoxStyle}>
-            <Text style={styles.hintMessage}>
-              {hintMessage1 != '' ? hintMessage1 : ''}
-            </Text>
-          </View>
-          <Pressable
-            style={styles.hintBoxStyle}
-            onPress={() => {
-              if (!hintVisible && hintMessage2 !== '')
-                Alert.alert(
-                  '힌트를 보시겠습니까?',
-                  '',
-                  [
-                    {
-                      text: '좀 더 생각해본다.',
-                      onPress: () => {},
-                      style: 'cancel',
-                    },
-                    {
-                      text: '지금 확인한다.',
-                      onPress: () => setHintVisible(true),
-                    },
-                  ],
-                  {cancelable: false},
-                );
-            }}>
-            {!hintVisible ? (
-              <Text style={{...styles.hintMessage, textAlign: 'center'}}>
-                🔒 터치하면 정답이 보입니다.
-              </Text>
-            ) : (
-              <Text style={styles.hintMessage}>{hintMessage2}</Text>
-            )}
-          </Pressable>
-        </View>
+        <HintMessageView
+          hintMessage1={hintMessage1}
+          hintMessage2={hintMessage2}
+          hintVisible={hintVisible}
+          setHintVisible={setHintVisible}
+        />
         <View
           style={{
             flex: 0.13,
@@ -238,25 +208,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'black',
-  },
-  hintView: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#353a40',
-  },
-  hintBoxStyle: {
-    flex: 0.5,
-    marginBottom: 5,
-    backgroundColor: '#212429',
-    borderWidth: 1.5,
-    borderRadius: 5,
-    borderColor: 'white',
-    padding: 10,
-    justifyContent: 'center',
-  },
-  hintMessage: {
-    color: 'white',
-    fontSize: 16,
   },
   tagButton: {
     flex: 1,
