@@ -25,7 +25,7 @@ import {
   storeGetUseHintList,
 } from '../util/storageUtil';
 import ClockModal from '../components/ClockModal';
-const tagingLogo = require('../assets/image/taging-logo.png');
+const tagingLogo = require('../assets/images/taging-logo.png');
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
