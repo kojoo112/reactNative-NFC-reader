@@ -46,6 +46,7 @@ const Setting = ({navigation, route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [hintObject, setHintObject] = useState({});
   const [state, dispatch] = useReducer(reducer, {});
+  const [clockModalVisible, setClockModalVisible] = useState(false);
 
   const getMerchantList = async () => {
     return await getData('/merchants');

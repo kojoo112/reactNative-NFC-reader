@@ -28,6 +28,7 @@
     "react-native-screens": "^3.13.1",
     "react-native-sound": "^0.11.2",
     "react-native-splash-screen": "^3.3.0",
+    "react-native-stopwatch-timer": "^0.0.21",
     "react-native-vector-icons": "^9.1.0",
     "react-native-video": "^5.2.0",
     "react-native-vision-camera": "^2.13.3"

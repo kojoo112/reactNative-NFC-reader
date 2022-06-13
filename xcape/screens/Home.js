@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
   View,
+  Image,
   TextInput,
   StyleSheet,
   Text,
@@ -14,6 +15,7 @@ import {
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TagRead from '../components/TagRead';
+import Clock from '../components/Clock';
 import {
   storeSetUseHintList,
   storeSetHintCount,
@@ -22,6 +24,8 @@ import {
   storeGetHintCount,
   storeGetUseHintList,
 } from '../util/storageUtil';
+import ClockModal from '../components/ClockModal';
+const tagingLogo = require('../assets/image/taging-logo.png');
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
@@ -35,6 +39,26 @@ const Home = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [useHintList, setUseHintList] = useState([]);
   const [isRefresh, setIsRefresh] = useState(false);
+
+  // Stopwatch
+  const [start, setStart] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [clockModalVisible, setClockModalVisible] = useState(true);
+
+  const startStopwatch = () => {
+    setStart(true);
+    setReset(false);
+  };
+
+  const resetStopwatch = () => {
+    setStart(false);
+    setReset(true);
+  };
+
+  const toggleStopwatch = () => {
+    setStart(false);
+    setReset(false);
+  };
 
   const handleTextChange = e => {
     const {text} = e.nativeEvent;
@@ -74,6 +98,8 @@ const Home = ({navigation}) => {
     setHintMessage1('');
     setHintMessage2('');
     setHintVisible(false);
+    resetStopwatch();
+    setClockModalVisible(true);
   }, [isRefresh]);
 
   useEffect(() => {
@@ -93,37 +119,32 @@ const Home = ({navigation}) => {
           isRefresh={isRefresh}
           setIsRefresh={setIsRefresh}
         />
-        <View
-          style={{
-            flex: 0.085,
-            flexDirection: 'row',
-            padding: 20,
-          }}>
-          <TextInput
-            autoCapitalize={'characters'}
-            maxLength={5}
-            onChange={e => handleTextChange(e)}
-            value={hintKey}
-            keyboardType={'default'}
-            returnKeyType={'search'}
-            style={styles.textInput}
-            onSubmitEditing={() => getHint(hintKey)}
-          />
-          <Pressable
-            style={styles.button}
-            onPress={() => {
-              Keyboard.dismiss();
-              getHint(hintKey);
-            }}>
-            <Icon name="search-sharp" size={24} color={'white'} />
-          </Pressable>
-        </View>
-        <TagRead
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          action={'readTag'}
-          hintObject={setComponents}
+        <Clock start={start} reset={reset} />
+        <ClockModal
+          startStopwatch={startStopwatch}
+          clockModalVisible={clockModalVisible}
+          setClockModalVisible={setClockModalVisible}
         />
+        <View style={{flex: 0.3, paddingHorizontal: 20}}>
+          <Pressable
+            style={styles.tagButton}
+            onPress={() => {
+              Vibration.vibrate(200, false);
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.tagText}>TA</Text>
+              <Image source={tagingLogo} style={{width: 50, height: 50}} />
+              <Text style={styles.tagText}>GING</Text>
+            </View>
+          </Pressable>
+          <TagRead
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            action={'readTag'}
+            hintObject={setComponents}
+          />
+        </View>
         <View style={styles.hintView}>
           <View style={styles.hintBoxStyle}>
             <Text style={styles.hintMessage}>
@@ -160,16 +181,30 @@ const Home = ({navigation}) => {
             )}
           </Pressable>
         </View>
-        <View style={{flex: 0.1, paddingHorizontal: 20, marginBottom: 10}}>
+        <View
+          style={{
+            flex: 0.13,
+            flexDirection: 'row',
+            paddingHorizontal: 20,
+            marginBottom: 10,
+          }}>
+          <TextInput
+            autoCapitalize={'characters'}
+            maxLength={5}
+            onChange={e => handleTextChange(e)}
+            value={hintKey}
+            keyboardType={'default'}
+            returnKeyType={'search'}
+            style={styles.textInput}
+            onSubmitEditing={() => getHint(hintKey)}
+          />
           <Pressable
-            style={styles.tagButton}
+            style={styles.button}
             onPress={() => {
-              Vibration.vibrate(200, false);
-              setModalVisible(!modalVisible);
+              Keyboard.dismiss();
+              getHint(hintKey);
             }}>
-            <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>
-              X-TAG
-            </Text>
+            <Icon name="search-sharp" size={24} color={'white'} />
           </Pressable>
         </View>
       </View>
@@ -208,11 +243,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#353a40',
-    marginTop: -20,
   },
   hintBoxStyle: {
     flex: 0.5,
-    marginBottom: 10,
+    marginBottom: 5,
     backgroundColor: '#212429',
     borderWidth: 1.5,
     borderRadius: 5,
@@ -235,6 +269,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     borderColor: 'white',
+  },
+  tagText: {
+    fontSize: 50,
+    fontWeight: '700',
+    color: 'white',
   },
 });
 
