@@ -24,17 +24,13 @@ const AudioView = props => {
   let returnAudio;
 
   const audioInit = () => {
-    const tempAudio = new Sound(
-      require('./../assets/sound/audio07.mp3'), // {2}
-      Sound.MAIN_BUNDLE,
-      error => {
-        if (error) {
-          console.log('play failed!');
-        }
-      },
-    );
-    returnAudio = tempAudio;
-    setHintAudio(tempAudio);
+    const sound = new Sound(props.url, undefined, error => {
+      if (error) {
+        console.error('AudioView >>> play failed!');
+      }
+    });
+    returnAudio = sound;
+    setHintAudio(sound);
   };
 
   useEffect(() => {
@@ -49,7 +45,6 @@ const AudioView = props => {
       hintAudio.play();
     } else {
       hintAudio.stop();
-      audioInit();
     }
     setAudioFlag(!audioFlag);
   };
