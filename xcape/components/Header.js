@@ -9,14 +9,16 @@ const Header = ({
   hintCount,
   themeName,
   setHintCount,
-  setThemeName,
   setUseHintList,
+  isRefresh,
+  setIsRefresh,
 }) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <Pressable
+        hitSlop={{top: 10, left: 10, right: 20, bottom: 20}}
         onPress={() => {
           Vibration.vibrate(200, false);
           prompt(
@@ -33,7 +35,8 @@ const Header = ({
                 onPress: password => {
                   if (password == '5772') {
                     navigation.navigate('Setting', {
-                      setThemeName: setThemeName,
+                      isRefresh: isRefresh,
+                      setIsRefresh: setIsRefresh,
                     });
                   }
                 },
@@ -95,7 +98,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     height: 60,
-    backgroundColor: 'black',
+    backgroundColor: '#212429',
     paddingHorizontal: 10,
     justifyContent: 'space-between',
     flexDirection: 'row',

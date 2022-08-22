@@ -114,9 +114,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
   },
+  tagText: {
+    fontSize: 50,
+    fontWeight: '700',
+    color: 'white',
+  },
 });
-<<<<<<< HEAD
-=======
 
 export default Home;
->>>>>>> parent of a39fa2e... Merge pull request #30 from kojoo112/feature/password-tag-view

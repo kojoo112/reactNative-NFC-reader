@@ -14,7 +14,7 @@ const Header = ({
 }) => {
   const navigation = useNavigation();
 
-  return (
+return (
     <View style={styles.container}>
       <Pressable
         onPress={() => {
@@ -92,7 +92,6 @@ const Header = ({
 
 export default Header;
 
-<<<<<<< HEAD
 const styles = StyleSheet.create({
   container: {
     height: 60,
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-=======
+
 // 스토리지에 사용한 힌트 리스트 저장 (기존 : storeUseHintList)
 export const storeSetUseHintList = async (useHintList, hintKey) => {
   const newHintList = {...useHintList, hintKey};
@@ -153,4 +152,3 @@ export const storeInitUseHintList = async () => {
     console.error(e);
   }
 };
->>>>>>> parent of a39fa2e... Merge pull request #30 from kojoo112/feature/password-tag-view
