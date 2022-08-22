@@ -63,7 +63,7 @@ const AudioView = props => {
       </View>
       <View style={{backgroundColor: 'red', height: 100}}>
         <ImageBackground
-          source={require('../assets/image/tape_template/controller.png')}
+          source={require('../assets/images/tape_template/controller.png')}
           style={styles.tapeController}
           resizeMode={'cover'}
         />

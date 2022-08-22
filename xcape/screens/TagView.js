@@ -21,6 +21,7 @@ const TagView = props => {
     <ScrollView style={{backgroundColor: 'black'}}>
       {components.map((element, idx) => {
         const Component = componentList[element.component];
+
         if (element.answer) {
           return (
             <Component
