@@ -1,9 +1,10 @@
 import {
-  StyleSheet,
   Text,
+  StyleSheet,
   TextInput,
   View,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -34,6 +35,13 @@ const PasswordTagView = props => {
   };
   const placeholder = '*'.repeat(props.answer.length);
 
+  const isAnswer = () => {
+    if (props.answer == password) {
+      return true;
+    } else {
+      Alert.alert('잘못된 입력입니다.', '올바르게 입력해주세요.');
+    }
+  };
   return (
     <View>
       <TextInput

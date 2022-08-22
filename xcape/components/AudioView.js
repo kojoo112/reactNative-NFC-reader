@@ -1,10 +1,10 @@
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   Dimensions,
   Image,
   ImageBackground,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Sound from 'react-native-sound';
@@ -13,9 +13,8 @@ import Sound from 'react-native-sound';
 // audioInit함수 require 하드코딩 수정 {2}
 // 이미지 추가 및 스타일시트 수정
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-const tapeImage = require('../assets/images/tape_template/tape-image1.png');
-const tapePlayImage = require('../assets/images/tape_template/tape-play.gif');
+const tapeImage = require('../assets/image/tape_template/tape-image1.png');
+const tapePlayImage = require('../assets/image/tape_template/tape-play.gif');
 
 const AudioView = props => {
   const [audioFlag, setAudioFlag] = useState(true);
@@ -68,6 +67,7 @@ const AudioView = props => {
           style={styles.tapeController}
           resizeMode={'cover'}
         />
+      </ImageBackground>
         <TouchableOpacity
           onPress={() => handleAudioFlag()}
           style={{
