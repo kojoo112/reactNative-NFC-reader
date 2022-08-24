@@ -67,7 +67,7 @@ const AudioView = props => {
           style={styles.tapeController}
           resizeMode={'cover'}
         />
-        <TouchableOpacity
+        <Pressable
           onPress={() => handleAudioFlag()}
           style={{
             position: 'absolute',
@@ -75,7 +75,7 @@ const AudioView = props => {
             left: 210,
             width: 60,
             height: 70,
-          }}></TouchableOpacity>
+          }}></Pressable>
       </View>
     </View>
   );

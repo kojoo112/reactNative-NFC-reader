@@ -26,8 +26,9 @@ import {
 } from '../util/storageUtil';
 import ClockModal from '../components/ClockModal';
 import SetTimerModal from '../components/SetTimerModal';
-const tagingLogo = require('../assets/images/taging-logo.png');
 import prompt from 'react-native-prompt-android';
+
+const tagingLogo = require('../assets/images/taging-logo.png');
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
