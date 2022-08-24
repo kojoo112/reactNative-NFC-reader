@@ -51,7 +51,8 @@ export const storeSetHintCount = async hintCount => {
 export const storeGetHintCount = async setHintCount => {
   try {
     const hintCount = JSON.parse(await AsyncStorage.getItem('hintCount'));
-    setHintCount(hintCount);
+    if (hintCount) setHintCount(hintCount);
+    else setHintCount(0);
   } catch (e) {
     console.error(e);
   }
