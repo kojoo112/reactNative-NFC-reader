@@ -25,7 +25,9 @@ import {
   storeGetUseHintList,
 } from '../util/storageUtil';
 import ClockModal from '../components/ClockModal';
+import SetTimerModal from '../components/SetTimerModal';
 const tagingLogo = require('../assets/images/taging-logo.png');
+import prompt from 'react-native-prompt-android';
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
@@ -44,6 +46,7 @@ const Home = ({navigation}) => {
   const [start, setStart] = useState(false);
   const [reset, setReset] = useState(false);
   const [clockModalVisible, setClockModalVisible] = useState(true);
+  const [timerModalVisible, setTimerModalVisible] = useState(false);
 
   const startStopwatch = () => {
     setStart(true);
@@ -56,7 +59,7 @@ const Home = ({navigation}) => {
   };
 
   const toggleStopwatch = () => {
-    setStart(false);
+    setStart(!start);
     setReset(false);
   };
 
@@ -119,11 +122,48 @@ const Home = ({navigation}) => {
           isRefresh={isRefresh}
           setIsRefresh={setIsRefresh}
         />
-        <Clock start={start} reset={reset} />
+        <Pressable
+          style={{flex: 0.3, justifyContent: 'center', alignItems: 'center'}}
+          onLongPress={() => {
+            Vibration.vibrate(200, false);
+            prompt(
+              '힌트관리자',
+              '관리자 비밀번호를 입력하세요',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'OK',
+                  onPress: password => {
+                    if (password == '5772') {
+                      setTimerModalVisible(true);
+                    }
+                  },
+                },
+              ],
+              {
+                type: 'secure-text',
+                cancelable: false,
+                placeholder: '비밀번호 입력...',
+              },
+            );
+          }}>
+          <Clock start={start} reset={reset} />
+        </Pressable>
         <ClockModal
           startStopwatch={startStopwatch}
           clockModalVisible={clockModalVisible}
           setClockModalVisible={setClockModalVisible}
+        />
+        <SetTimerModal
+          start={start}
+          toggleStopwatch={toggleStopwatch}
+          resetStopwatch={resetStopwatch}
+          timerModalVisible={timerModalVisible}
+          setTimerModalVisible={setTimerModalVisible}
         />
         <View style={{flex: 0.3, paddingHorizontal: 20}}>
           <Pressable
