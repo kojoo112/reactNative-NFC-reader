@@ -39,7 +39,7 @@ const PasswordTagView = props => {
   const placeholder = '*'.repeat(props.answer.length);
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         style={styles.input}
         onChangeText={setPassword}
@@ -53,7 +53,7 @@ const PasswordTagView = props => {
         ref={passwordRef}
       />
       <TouchableOpacity style={styles.button} onPress={isAnswer}>
-        <Text style={styles.buttonText}>전 송 하 기</Text>
+        <Text style={styles.buttonText}>입 력</Text>
       </TouchableOpacity>
     </View>
   );
@@ -62,9 +62,15 @@ const PasswordTagView = props => {
 export default PasswordTagView;
 
 const styles = StyleSheet.create({
-  input: {
+  container: {
+    flex: 1,
+    flexDirection: 'row',
     height: 80,
-    backgroundColor: 'black',
+  },
+  input: {
+    width: '70%',
+    backgroundColor: '#18191b',
+
     color: '#d3d3d3',
     fontSize: 30,
     padding: 10,
@@ -72,8 +78,7 @@ const styles = StyleSheet.create({
     letterSpacing: 10,
   },
   button: {
-    width: '100%',
-    height: 60,
+    width: '30%',
     backgroundColor: 'red',
     justifyContent: 'center',
   },

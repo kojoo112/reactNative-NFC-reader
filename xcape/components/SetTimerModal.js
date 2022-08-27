@@ -32,10 +32,10 @@ const SetTimerModal = ({
       }}>
       <View style={styles.container}>
         <Pressable onPress={toggleStopwatch} style={styles.button}>
-          <Text>{isStarted}</Text>
+          <Text style={styles.text}>{isStarted}</Text>
         </Pressable>
         <Pressable onPress={resetStopwatch} style={styles.button}>
-          <Text>시간 초기화</Text>
+          <Text style={styles.text}>시간 초기화</Text>
         </Pressable>
       </View>
     </Modal>
@@ -59,5 +59,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginHorizontal: 5,
+  },
+  text: {
+    color: 'white',
+    fontSize: 16,
   },
 });

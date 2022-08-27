@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     borderColor: 'white',
+    color: 'white',
     padding: 10,
   },
   button: {
