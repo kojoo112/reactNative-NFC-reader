@@ -94,3 +94,52 @@ export const storeInitUseHintList = async () => {
     console.error(e);
   }
 };
+
+export const storeInitStartTime = async startTime => {
+  try {
+    await AsyncStorage.setItem('startTime', '');
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeSetStartTime = async startTime => {
+  try {
+    await AsyncStorage.setItem('startTime', startTime.toString());
+    console.log('storeSetStartTime : ', startTime);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeGetStartTime = async () => {
+  try {
+    const startTime = await AsyncStorage.getItem('startTime');
+    console.log('storeGetStartTime : ', startTime);
+    if (startTime !== null) {
+      return Number(startTime);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeSetTime = async time => {
+  try {
+    await AsyncStorage.setItem('time', time.toString());
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeGetTime = async () => {
+  try {
+    const time = await AsyncStorage.getItem('time');
+    console.log('storeGetTime >>> ', time);
+    if (time !== null) {
+      return Number(time);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};

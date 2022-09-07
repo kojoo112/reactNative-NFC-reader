@@ -8,8 +8,9 @@ const SetTimerModal = ({
   resetStopwatch,
   timerModalVisible,
   setTimerModalVisible,
+  setClockModalVisible,
 }) => {
-  const [isStarted, setIsStarted] = useState(start);
+  const [isStarted, setIsStarted] = useState('');
   const closeModal = () => {
     setTimerModalVisible(false);
   };
@@ -32,10 +33,18 @@ const SetTimerModal = ({
       }}>
       <View style={styles.container}>
         <Pressable onPress={toggleStopwatch} style={styles.button}>
-          <Text style={styles.text}>{isStarted}</Text>
+          <Text>{isStarted}</Text>
         </Pressable>
-        <Pressable onPress={resetStopwatch} style={styles.button}>
-          <Text style={styles.text}>시간 초기화</Text>
+        <Pressable
+          onPress={() => {
+            storeSetStartTime('').then(() => {
+              closeModal();
+              resetStopwatch();
+              setClockModalVisible(true);
+            });
+          }}
+          style={styles.button}>
+          <Text>시간 초기화</Text>
         </Pressable>
       </View>
     </Modal>
@@ -59,9 +68,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginHorizontal: 5,
-  },
-  text: {
-    color: 'white',
-    fontSize: 16,
   },
 });

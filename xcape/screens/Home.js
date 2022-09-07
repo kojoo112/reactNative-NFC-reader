@@ -1,34 +1,36 @@
-import React, {useState, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  View,
   Image,
-  TextInput,
+  Keyboard,
+  Pressable,
   StyleSheet,
   Text,
-  Pressable,
+  TextInput,
   ToastAndroid,
-  Vibration,
-  Keyboard,
   TouchableWithoutFeedback,
+  Vibration,
+  View,
 } from 'react-native';
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TagRead from '../components/TagRead';
-import Clock from '../components/Clock';
 import HintMessageView from '../components/HintMessageView';
 import {
-  storeSetUseHintList,
-  storeSetHintCount,
-  storeGetThemeName,
-  storeGetHintList,
   storeGetHintCount,
+  storeGetHintList,
+  storeGetStartTime,
+  storeGetThemeName,
+  storeGetTime,
   storeGetUseHintList,
+  storeSetHintCount,
+  storeSetUseHintList,
 } from '../util/storageUtil';
 import ClockModal from '../components/ClockModal';
 import SetTimerModal from '../components/SetTimerModal';
 import prompt from 'react-native-prompt-android';
+import Timer from '../components/Timer';
 
-const tagingLogo = require('../assets/images/taging-logo.png');
+const taggingLogo = require('../assets/images/taging-logo.png');
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
@@ -44,25 +46,29 @@ const Home = ({navigation}) => {
   const [isRefresh, setIsRefresh] = useState(false);
 
   // Stopwatch
+  const [time, setTime] = useState(60);
+  const [timerStatus, setTimerStatus] = useState('');
+  const [startTime, setStartTime] = useState(0);
   const [start, setStart] = useState(false);
   const [reset, setReset] = useState(false);
   const [clockModalVisible, setClockModalVisible] = useState(true);
   const [timerModalVisible, setTimerModalVisible] = useState(false);
 
-  const startStopwatch = () => {
+  const startStopwatch = useCallback(() => {
     setStart(true);
     setReset(false);
-  };
+  }, []);
 
-  const resetStopwatch = () => {
+  const resetStopwatch = useCallback(() => {
     setStart(false);
     setReset(true);
-  };
+    setStartTime(0);
+  }, []);
 
-  const toggleStopwatch = () => {
+  const toggleStopwatch = useCallback(() => {
     setStart(!start);
     setReset(false);
-  };
+  }, [start]);
 
   const handleTextChange = e => {
     const {text} = e.nativeEvent;
@@ -107,6 +113,21 @@ const Home = ({navigation}) => {
   }, [isRefresh]);
 
   useEffect(() => {
+    storeGetTime()
+      .then(time => {
+        setTime(time);
+        return storeGetStartTime();
+      })
+      .then(startTime => {
+        if (startTime) {
+          setStartTime(startTime);
+          startStopwatch();
+          setClockModalVisible(false);
+        }
+      });
+  }, []);
+
+  useEffect(() => {
     if (components.length > 0) {
       navigation.navigate('TagView', {components: components});
     }
@@ -122,6 +143,7 @@ const Home = ({navigation}) => {
           setUseHintList={setUseHintList}
           isRefresh={isRefresh}
           setIsRefresh={setIsRefresh}
+          setTime={setTime}
         />
         <Pressable
           style={{flex: 0.3, justifyContent: 'center', alignItems: 'center'}}
@@ -133,13 +155,12 @@ const Home = ({navigation}) => {
               [
                 {
                   text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
                   style: 'cancel',
                 },
                 {
                   text: 'OK',
                   onPress: password => {
-                    if (password == '5772') {
+                    if (password === '5772') {
                       setTimerModalVisible(true);
                     }
                   },
@@ -152,7 +173,12 @@ const Home = ({navigation}) => {
               },
             );
           }}>
-          <Clock start={start} reset={reset} />
+          <Timer
+            timerStart={start}
+            timerReset={reset}
+            totalTime={time}
+            startTime={startTime}
+            setStartTime={setStartTime}></Timer>
         </Pressable>
         <ClockModal
           startStopwatch={startStopwatch}
@@ -165,6 +191,7 @@ const Home = ({navigation}) => {
           resetStopwatch={resetStopwatch}
           timerModalVisible={timerModalVisible}
           setTimerModalVisible={setTimerModalVisible}
+          setClockModalVisible={setClockModalVisible}
         />
         <View style={{flex: 0.3, paddingHorizontal: 20}}>
           <Pressable
@@ -174,8 +201,8 @@ const Home = ({navigation}) => {
               setModalVisible(!modalVisible);
             }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.tagText}>TA</Text>
-              <Image source={tagingLogo} style={{width: 50, height: 50}} />
+              <Text style={styles.tagText}>TAG</Text>
+              <Image source={taggingLogo} style={{width: 50, height: 50}} />
               <Text style={styles.tagText}>GING</Text>
             </View>
           </Pressable>
