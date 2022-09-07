@@ -14,7 +14,6 @@ const ClockModal = ({
         <Pressable
           onPress={() => {
             storeSetStartTime(new Date().getTime()).then(() => {
-              console.log('asdfasdfasdf');
               startStopwatch();
               setClockModalVisible(false);
             });

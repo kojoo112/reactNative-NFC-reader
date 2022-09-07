@@ -24,7 +24,7 @@ const PasswordTagView = props => {
 
   const isAnswer = async () => {
     try {
-      if (answer == password.toUpperCase()) {
+      if (answer === password.toUpperCase()) {
         const components = await getMoveToPageComponents();
         navigation.push('TagView', {components: components});
       } else {

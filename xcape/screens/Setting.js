@@ -43,7 +43,6 @@ export const reducer = (state, action) => {
 
 const Setting = ({navigation, route}) => {
   LogBox.ignoreAllLogs();
-  // const isRefresh = route.params.isRefresh;
   const setIsRefresh = route.params.setIsRefresh;
   const setTime = route.params.setTime;
 
@@ -51,7 +50,6 @@ const Setting = ({navigation, route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [hintObject, setHintObject] = useState({});
   const [state, dispatch] = useReducer(reducer, {});
-  const [clockModalVisible, setClockModalVisible] = useState(false);
 
   const getMerchantList = async () => {
     return await getData('/merchants');
@@ -161,6 +159,7 @@ const Setting = ({navigation, route}) => {
               keyboardType={'numeric'}
               placeholder={'분 단위'}
               onChangeText={e => setTimerTime(Number(e))}
+              defaultValue={'60'}
               maxLength={3}></TextInput>
           </View>
         </View>

@@ -28,7 +28,6 @@ const Header = ({
             [
               {
                 text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
               {
@@ -65,13 +64,12 @@ const Header = ({
               [
                 {
                   text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
                   style: 'cancel',
                 },
                 {
                   text: 'OK',
                   onPress: password => {
-                    if (password == '5772') {
+                    if (password === '5772') {
                       storeInitHintCount();
                       storeInitUseHintList();
                       setHintCount(0);

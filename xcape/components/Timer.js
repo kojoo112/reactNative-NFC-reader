@@ -54,6 +54,9 @@ const Timer = React.memo(
     };
 
     const formatTime = () => {
+      if (isNaN(Number(time))) {
+        return 'Timer Setting';
+      }
       return formatTimeString(time);
     };
 
