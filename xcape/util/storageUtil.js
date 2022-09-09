@@ -1,7 +1,35 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export const storeSetDropdown = async (merchantValue, themeValue) => {
+  try {
+    await AsyncStorage.setItem('merchantValue', merchantValue);
+    await AsyncStorage.setItem('themeValue', themeValue);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export const storeGetDropdown = async () => {
+  try {
+    const merchantValue = await AsyncStorage.getItem('merchantValue');
+    const themeValue = await AsyncStorage.getItem('themeValue');
+
+    if(!merchantValue || !themeValue) {
+      merchantValue = 'mrc001';
+      themeValue = 'thm001';
+    }
+    const dropdownItem = {
+      "merchantValue": merchantValue,
+      "themeValue": themeValue,
+    }
+    return dropdownItem;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 // 스토리지에 테마 이름 저장
-export const storeSetThemeName = async getThemeName => {
+export const storeSetThemeName = async (getThemeName, ) => {
   const themeName = JSON.stringify(await getThemeName());
   try {
     await AsyncStorage.setItem('themeName', themeName);
