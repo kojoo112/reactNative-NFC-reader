@@ -8,8 +8,9 @@ const SetTimerModal = ({
   resetStopwatch,
   timerModalVisible,
   setTimerModalVisible,
+  setClockModalVisible,
 }) => {
-  const [isStarted, setIsStarted] = useState(start);
+  const [isStarted, setIsStarted] = useState('');
   const closeModal = () => {
     setTimerModalVisible(false);
   };
@@ -34,7 +35,15 @@ const SetTimerModal = ({
         <Pressable onPress={toggleStopwatch} style={styles.button}>
           <Text>{isStarted}</Text>
         </Pressable>
-        <Pressable onPress={resetStopwatch} style={styles.button}>
+        <Pressable
+          onPress={() => {
+            storeSetStartTime('').then(() => {
+              closeModal();
+              resetStopwatch();
+              setClockModalVisible(true);
+            });
+          }}
+          style={styles.button}>
           <Text>시간 초기화</Text>
         </Pressable>
       </View>
