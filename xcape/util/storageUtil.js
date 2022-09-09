@@ -1,7 +1,35 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export const storeSetDropdown = async (merchantValue, themeValue) => {
+  try {
+    await AsyncStorage.setItem('merchantValue', merchantValue);
+    await AsyncStorage.setItem('themeValue', themeValue);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export const storeGetDropdown = async () => {
+  try {
+    const merchantValue = await AsyncStorage.getItem('merchantValue');
+    const themeValue = await AsyncStorage.getItem('themeValue');
+
+    if(!merchantValue || !themeValue) {
+      merchantValue = 'mrc001';
+      themeValue = 'thm001';
+    }
+    const dropdownItem = {
+      "merchantValue": merchantValue,
+      "themeValue": themeValue,
+    }
+    return dropdownItem;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 // 스토리지에 테마 이름 저장
-export const storeSetThemeName = async getThemeName => {
+export const storeSetThemeName = async (getThemeName, ) => {
   const themeName = JSON.stringify(await getThemeName());
   try {
     await AsyncStorage.setItem('themeName', themeName);
@@ -90,6 +118,52 @@ export const storeInitHintCount = async () => {
 export const storeInitUseHintList = async () => {
   try {
     await AsyncStorage.setItem('useHintList', '');
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeInitStartTime = async startTime => {
+  try {
+    await AsyncStorage.setItem('startTime', '');
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeSetStartTime = async startTime => {
+  try {
+    await AsyncStorage.setItem('startTime', startTime.toString());
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeGetStartTime = async () => {
+  try {
+    const startTime = await AsyncStorage.getItem('startTime');
+    if (startTime !== null) {
+      return Number(startTime);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeSetTime = async time => {
+  try {
+    await AsyncStorage.setItem('time', time.toString());
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeGetTime = async () => {
+  try {
+    const time = await AsyncStorage.getItem('time');
+    if (time !== null) {
+      return Number(time);
+    }
   } catch (e) {
     console.error(e);
   }
