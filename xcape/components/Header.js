@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Pressable, Vibration} from 'react-native';
+import {Pressable, StyleSheet, Text, Vibration, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import prompt from 'react-native-prompt-android';
@@ -12,6 +12,7 @@ const Header = ({
   setUseHintList,
   isRefresh,
   setIsRefresh,
+  setTime,
 }) => {
   const navigation = useNavigation();
 
@@ -27,16 +28,16 @@ const Header = ({
             [
               {
                 text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
               {
                 text: 'OK',
                 onPress: password => {
-                  if (password == '5772') {
+                  if (password === '5772') {
                     navigation.navigate('Setting', {
                       isRefresh: isRefresh,
                       setIsRefresh: setIsRefresh,
+                      setTime: setTime,
                     });
                   }
                 },
@@ -63,13 +64,12 @@ const Header = ({
               [
                 {
                   text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
                   style: 'cancel',
                 },
                 {
                   text: 'OK',
                   onPress: password => {
-                    if (password == '5772') {
+                    if (password === '5772') {
                       storeInitHintCount();
                       storeInitUseHintList();
                       setHintCount(0);

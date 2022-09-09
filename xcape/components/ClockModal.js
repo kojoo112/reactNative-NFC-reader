@@ -1,6 +1,7 @@
-import {Pressable, StyleSheet, View, Text, Button} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Modal from 'react-native-modal';
+import {storeSetStartTime} from '../util/storageUtil';
 
 const ClockModal = ({
   startStopwatch,
@@ -12,8 +13,10 @@ const ClockModal = ({
       <View style={styles.container}>
         <Pressable
           onPress={() => {
-            startStopwatch();
-            setClockModalVisible(false);
+            storeSetStartTime(new Date().getTime()).then(() => {
+              startStopwatch();
+              setClockModalVisible(false);
+            });
           }}
           style={styles.button}>
           <Text style={styles.text}>조사 시작</Text>

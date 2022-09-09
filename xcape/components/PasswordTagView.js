@@ -4,15 +4,16 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Alert,
+  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {getData} from '../util/util';
 
 const PasswordTagView = props => {
   const [password, setPassword] = useState(null);
   const navigation = useNavigation();
+  const passwordRef = useRef();
 
   const answer = props.answer.toUpperCase();
 
@@ -23,11 +24,13 @@ const PasswordTagView = props => {
 
   const isAnswer = async () => {
     try {
-      if (answer == password.toUpperCase()) {
+      if (answer === password.toUpperCase()) {
         const components = await getMoveToPageComponents();
-        navigation.replace('TagView', {components: components});
+        navigation.push('TagView', {components: components});
       } else {
-        Alert.alert('잘못된 입력입니다.', '올바르게 입력해주세요.');
+        ToastAndroid.show('잘못된 입력입니다.', ToastAndroid.SHORT);
+        setPassword('');
+        passwordRef.current.clear();
       }
     } catch (e) {
       console.error(e);
@@ -35,24 +38,22 @@ const PasswordTagView = props => {
   };
   const placeholder = '*'.repeat(props.answer.length);
 
-  const isAnswer = () => {
-    if (props.answer == password) {
-      return true;
-    } else {
-      Alert.alert('잘못된 입력입니다.', '올바르게 입력해주세요.');
-    }
-  };
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         style={styles.input}
         onChangeText={setPassword}
         placeholder={placeholder}
         maxLength={props.answer.length}
         autoCapitalize="characters"
+        multiline={true}
+        numberOfLines={1}
+        blurOnSubmit={true}
+        returnKeyType="search"
+        ref={passwordRef}
       />
       <TouchableOpacity style={styles.button} onPress={isAnswer}>
-        <Text style={styles.buttonText}>전 송 하 기</Text>
+        <Text style={styles.buttonText}>입 력</Text>
       </TouchableOpacity>
     </View>
   );
@@ -61,18 +62,23 @@ const PasswordTagView = props => {
 export default PasswordTagView;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    height: 80,
+  },
   input: {
-    height: 50,
-    backgroundColor: 'black',
+    width: '70%',
+    backgroundColor: '#18191b',
+
     color: '#d3d3d3',
-    fontSize: 24,
+    fontSize: 30,
     padding: 10,
     textAlign: 'center',
-    letterSpacing: 5,
+    letterSpacing: 10,
   },
   button: {
-    width: '100%',
-    height: 40,
+    width: '30%',
     backgroundColor: 'red',
     justifyContent: 'center',
   },

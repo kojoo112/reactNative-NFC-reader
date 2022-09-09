@@ -1,10 +1,10 @@
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import {Stopwatch, Timer} from 'react-native-stopwatch-timer';
 
 const Clock = ({start, reset}) => {
   return (
-    <View style={styles.container}>
+    <View>
       <Stopwatch start={start} reset={reset} options={options} msecs />
     </View>
   );
@@ -23,11 +23,3 @@ const options = {
     fontWeight: '600',
   },
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 0.3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

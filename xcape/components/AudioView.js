@@ -13,8 +13,8 @@ import Sound from 'react-native-sound';
 // audioInit함수 require 하드코딩 수정 {2}
 // 이미지 추가 및 스타일시트 수정
 const windowWidth = Dimensions.get('window').width;
-const tapeImage = require('../assets/image/tape_template/tape-image1.png');
-const tapePlayImage = require('../assets/image/tape_template/tape-play.gif');
+const tapeImage = require('../assets/images/tape_template/tape-image1.png');
+const tapePlayImage = require('../assets/images/tape_template/tape-play.gif');
 
 const AudioView = props => {
   const [audioFlag, setAudioFlag] = useState(true);

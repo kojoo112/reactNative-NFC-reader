@@ -1,4 +1,5 @@
 import React from 'react';
+import {StyleSheet} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 const Dropdown = ({selectValue, objectList, action}) => {
@@ -7,7 +8,7 @@ const Dropdown = ({selectValue, objectList, action}) => {
   } else {
     return (
       <Picker
-        style={{flex: 1}}
+        style={styles.picker}
         selectedValue={selectValue}
         onValueChange={value => {
           action(value);
@@ -27,5 +28,11 @@ const Dropdown = ({selectValue, objectList, action}) => {
     );
   }
 };
+const styles = StyleSheet.create({
+  picker: {
+    flex: 1,
+    color: 'white',
+  },
+});
 
 export default React.memo(Dropdown);

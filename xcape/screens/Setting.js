@@ -3,34 +3,39 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   Vibration,
   View,
 } from 'react-native';
-import React, {useEffect, useState, useReducer} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import Dropdown from '../components/Dropdown';
 import {getData} from '../util/util';
 import TagRead from '../components/TagRead';
 import {
   INIT_DATA,
   MERCHANT_CHANGED,
-  THEME_CHANGED,
   PAGE_CHANGED,
+  THEME_CHANGED,
 } from '../util/constants';
 import {
   storeInitHintCount,
   storeInitUseHintList,
   storeSetHintList,
+  storeSetStartTime,
   storeSetThemeName,
+  storeSetTime,
+  storeSetDropdown,
+  storeGetDropdown
 } from '../util/storageUtil';
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case INIT_DATA:
-      return {...action.payload};
+      return {...state, ...action.payload};
     case MERCHANT_CHANGED:
-      return {...action.payload};
+      return {...state, ...action.payload};
     case THEME_CHANGED:
-      return {...action.payload};
+      return {...state, ...action.payload};
     case PAGE_CHANGED:
       return {...state, pageValue: action.payload};
     default:
@@ -40,13 +45,13 @@ export const reducer = (state, action) => {
 
 const Setting = ({navigation, route}) => {
   LogBox.ignoreAllLogs();
-  const isRefresh = route.params.isRefresh;
   const setIsRefresh = route.params.setIsRefresh;
+  const setTime = route.params.setTime;
 
+  const [timerTime, setTimerTime] = useState(60);
   const [modalVisible, setModalVisible] = useState(false);
   const [hintObject, setHintObject] = useState({});
   const [state, dispatch] = useReducer(reducer, {});
-  const [clockModalVisible, setClockModalVisible] = useState(false);
 
   const getMerchantList = async () => {
     return await getData('/merchants');
@@ -89,23 +94,23 @@ const Setting = ({navigation, route}) => {
   };
 
   const pageChanged = async pageCode => {
-    const page = pageCode;
-
-    dispatch({type: PAGE_CHANGED, payload: page});
+    dispatch({type: PAGE_CHANGED, payload: pageCode});
   };
 
   useEffect(() => {
     const initList = async () => {
+      const {merchantValue, themeValue} =  await storeGetDropdown();
+
       const merchant = await getMerchantList();
-      const theme = await getThemeList('mrc001');
-      const page = await getPageList('mrc001', 'thm001');
+      const theme = await getThemeList(merchantValue);
+      const page = await getPageList(merchantValue, 'thm001');
 
       const data = {
         merchantList: merchant,
         themeList: theme,
         pageList: page,
-        merchantValue: 'mrc001',
-        themeValue: 'thm001',
+        merchantValue: merchantValue,
+        themeValue: themeValue,
         pageValue: 'page01',
       };
       dispatch({type: INIT_DATA, payload: data});
@@ -120,10 +125,7 @@ const Setting = ({navigation, route}) => {
   };
 
   const getThemeName = async () => {
-    const themeName = await getData(
-      `/themes/${state.merchantValue}/${state.themeValue}`,
-    );
-    return themeName;
+    return await getData(`/themes/${state.merchantValue}/${state.themeValue}`);
   };
 
   const createHintObject = () => {
@@ -136,7 +138,7 @@ const Setting = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.wrapperBox}>
+      <View style={{flex: 1, ...styles.wrapperBox}}>
         <View style={styles.content}>
           <Text style={styles.label}>가맹점</Text>
           <Dropdown
@@ -154,6 +156,18 @@ const Setting = ({navigation, route}) => {
           />
         </View>
         <View style={styles.content}>
+          <Text style={styles.label}>시간</Text>
+          <View style={{flex: 1}}>
+            <TextInput
+              style={styles.timeTextInput}
+              keyboardType={'numeric'}
+              placeholder={'분 단위'}
+              onChangeText={e => setTimerTime(Number(e))}
+              defaultValue={'60'}
+              maxLength={3}></TextInput>
+          </View>
+        </View>
+        <View style={styles.content}>
           <Pressable
             onPress={() => {
               storeInitUseHintList().then(() => {
@@ -165,8 +179,18 @@ const Setting = ({navigation, route}) => {
                     return storeSetThemeName(getThemeName);
                   })
                   .then(() => {
+                    return storeSetDropdown(state.merchantValue, state.themeValue);
+                  })
+                  .then(() => {
                     setIsRefresh(isRefresh => !isRefresh);
-                    navigation.navigate('Home');
+                    setTime(timerTime);
+                    storeSetStartTime('')
+                      .then(() => {
+                        return storeSetTime(timerTime);
+                      })
+                      .then(() => {
+                        navigation.navigate('Home');
+                      });
                   });
               });
             }}
@@ -175,7 +199,7 @@ const Setting = ({navigation, route}) => {
           </Pressable>
         </View>
       </View>
-      <View style={styles.wrapperBox}>
+      <View style={{flex: 0.5, ...styles.wrapperBox}}>
         <View style={styles.content}>
           <Text style={styles.label}>Page</Text>
           <Dropdown
@@ -214,10 +238,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#353a40',
   },
   wrapperBox: {
-    flex: 0.5,
     backgroundColor: '#212429',
     margin: 20,
-    borderRadius: 10,
     justifyContent: 'space-around',
     alignItems: 'center',
     borderWidth: 1.5,
@@ -249,6 +271,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     textAlign: 'center',
+    color: 'white',
+  },
+  timeTextInput: {
+    // flex: 1,
+    width: 100,
+    backgroundColor: '#717171',
+    fontSize: 16,
+    fontWeight: '700',
     color: 'white',
   },
 });
