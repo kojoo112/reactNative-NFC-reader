@@ -11,10 +11,10 @@ export const storeSetDropdown = async (merchantValue, themeValue) => {
 
 export const storeGetDropdown = async () => {
   try {
-    const merchantValue = await AsyncStorage.getItem('merchantValue');
-    const themeValue = await AsyncStorage.getItem('themeValue');
+    let merchantValue = await AsyncStorage.getItem('merchantValue');
+    let themeValue = await AsyncStorage.getItem('themeValue');
 
-    if(!merchantValue || !themeValue) {
+    if(merchantValue == null || merchantValue == '' || themeValue == null || themeValue == '') {
       merchantValue = 'mrc001';
       themeValue = 'thm001';
     }
