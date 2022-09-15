@@ -25,7 +25,7 @@ import {
   storeSetThemeName,
   storeSetTime,
   storeSetDropdown,
-  storeGetDropdown
+  storeGetDropdown,
 } from '../util/storageUtil';
 
 export const reducer = (state, action) => {
@@ -99,16 +99,16 @@ const Setting = ({navigation, route}) => {
 
   useEffect(() => {
     const initList = async () => {
-      const {merchantValue, themeValue} =  await storeGetDropdown();
+      const {merchantValue, themeValue} = await storeGetDropdown();
 
       const merchant = await getMerchantList();
       const theme = await getThemeList(merchantValue);
-      const page = await getPageList(merchantValue, 'thm001');
+      const pageList = await getPageList(merchantValue, themeValue);
 
       const data = {
         merchantList: merchant,
         themeList: theme,
-        pageList: page,
+        pageList: pageList,
         merchantValue: merchantValue,
         themeValue: themeValue,
         pageValue: 'page01',
@@ -179,7 +179,10 @@ const Setting = ({navigation, route}) => {
                     return storeSetThemeName(getThemeName);
                   })
                   .then(() => {
-                    return storeSetDropdown(state.merchantValue, state.themeValue);
+                    return storeSetDropdown(
+                      state.merchantValue,
+                      state.themeValue,
+                    );
                   })
                   .then(() => {
                     setIsRefresh(isRefresh => !isRefresh);

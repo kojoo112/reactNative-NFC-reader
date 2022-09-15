@@ -5,6 +5,7 @@ import {
   Image,
   ImageBackground,
   Pressable,
+  Vibration,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Sound from 'react-native-sound';
@@ -68,7 +69,10 @@ const AudioView = props => {
           resizeMode={'cover'}
         />
         <Pressable
-          onPress={() => handleAudioFlag()}
+          onPress={() => {
+            Vibration.vibrate(200, false);
+            handleAudioFlag();
+          }}
           style={{
             position: 'absolute',
             top: 34,

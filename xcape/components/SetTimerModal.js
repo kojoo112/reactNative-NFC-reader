@@ -1,6 +1,11 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
+import {
+  storeInitHintCount,
+  storeInitUseHintList,
+  storeSetStartTime,
+} from '../util/storageUtil';
 
 const SetTimerModal = ({
   start,
@@ -9,6 +14,8 @@ const SetTimerModal = ({
   timerModalVisible,
   setTimerModalVisible,
   setClockModalVisible,
+  isRefresh,
+  setIsRefresh,
 }) => {
   const [isStarted, setIsStarted] = useState('');
   const closeModal = () => {
@@ -32,16 +39,21 @@ const SetTimerModal = ({
         closeModal();
       }}>
       <View style={styles.container}>
-        <Pressable onPress={toggleStopwatch} style={styles.button}>
-          <Text>{isStarted}</Text>
-        </Pressable>
         <Pressable
           onPress={() => {
-            storeSetStartTime('').then(() => {
-              closeModal();
-              resetStopwatch();
-              setClockModalVisible(true);
-            });
+            storeSetStartTime('')
+              .then(() => {
+                return storeInitHintCount();
+              })
+              .then(() => {
+                return storeInitUseHintList();
+              })
+              .then(() => {
+                closeModal();
+                resetStopwatch();
+                setClockModalVisible(true);
+                setIsRefresh(!isRefresh);
+              });
           }}
           style={styles.button}>
           <Text>시간 초기화</Text>

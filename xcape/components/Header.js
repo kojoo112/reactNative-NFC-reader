@@ -1,16 +1,15 @@
 import {Pressable, StyleSheet, Text, Vibration, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import prompt from 'react-native-prompt-android';
 import {useNavigation} from '@react-navigation/native';
 import {storeInitHintCount, storeInitUseHintList} from '../util/storageUtil';
+import {customPrompt} from '../util/util';
 
 const Header = ({
   hintCount,
   themeName,
   setHintCount,
   setUseHintList,
-  isRefresh,
   setIsRefresh,
   setTime,
 }) => {
@@ -22,66 +21,29 @@ const Header = ({
         hitSlop={{top: 10, left: 10, right: 20, bottom: 20}}
         onPress={() => {
           Vibration.vibrate(200, false);
-          prompt(
-            '힌트관리자',
-            '관리자 비밀번호를 입력하세요',
-            [
-              {
-                text: 'Cancel',
-                style: 'cancel',
-              },
-              {
-                text: 'OK',
-                onPress: password => {
-                  if (password === '5772') {
-                    navigation.navigate('Setting', {
-                      isRefresh: isRefresh,
-                      setIsRefresh: setIsRefresh,
-                      setTime: setTime,
-                    });
-                  }
-                },
-              },
-            ],
-            {
-              type: 'secure-text',
-              cancelable: false,
-              placeholder: '비밀번호 입력...',
-            },
-          );
+          customPrompt('힌트관리자', '관리자 비밀번호를 입력하세요', () => {
+            navigation.navigate('Setting', {
+              setIsRefresh: setIsRefresh,
+              setTime: setTime,
+            });
+          });
         }}>
         <Icon name="settings-sharp" size={24} color={'white'} />
       </Pressable>
-      {/* <View style={{width: 40}}></View> */}
+
       <Text style={styles.themeName}>{themeName}</Text>
       <View>
         <Pressable
           onLongPress={() => {
             Vibration.vibrate(200, false);
-            prompt(
+            customPrompt(
               '힌트카운트 초기화',
               '관리자 비밀번호를 입력하세요',
-              [
-                {
-                  text: 'Cancel',
-                  style: 'cancel',
-                },
-                {
-                  text: 'OK',
-                  onPress: password => {
-                    if (password === '5772') {
-                      storeInitHintCount();
-                      storeInitUseHintList();
-                      setHintCount(0);
-                      setUseHintList([]);
-                    }
-                  },
-                },
-              ],
-              {
-                type: 'secure-text',
-                cancelable: false,
-                placeholder: '비밀번호 입력...',
+              () => {
+                storeInitHintCount();
+                storeInitUseHintList();
+                setHintCount(0);
+                setUseHintList([]);
               },
             );
           }}>

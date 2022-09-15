@@ -27,8 +27,8 @@ import {
 } from '../util/storageUtil';
 import ClockModal from '../components/ClockModal';
 import SetTimerModal from '../components/SetTimerModal';
-import prompt from 'react-native-prompt-android';
 import Timer from '../components/Timer';
+import {customPrompt} from '../util/util';
 
 const taggingLogo = require('../assets/images/taging-logo.png');
 
@@ -47,7 +47,6 @@ const Home = ({navigation}) => {
 
   // Stopwatch
   const [time, setTime] = useState(60);
-  const [timerStatus, setTimerStatus] = useState('');
   const [startTime, setStartTime] = useState(0);
   const [start, setStart] = useState(false);
   const [reset, setReset] = useState(false);
@@ -149,28 +148,8 @@ const Home = ({navigation}) => {
           style={{flex: 0.3, justifyContent: 'center', alignItems: 'center'}}
           onLongPress={() => {
             Vibration.vibrate(200, false);
-            prompt(
-              '힌트관리자',
-              '관리자 비밀번호를 입력하세요',
-              [
-                {
-                  text: 'Cancel',
-                  style: 'cancel',
-                },
-                {
-                  text: 'OK',
-                  onPress: password => {
-                    if (password === '5772') {
-                      setTimerModalVisible(true);
-                    }
-                  },
-                },
-              ],
-              {
-                type: 'secure-text',
-                cancelable: false,
-                placeholder: '비밀번호 입력...',
-              },
+            customPrompt('힌트관리자', '관리자 비밀번호를 입력하세요', () =>
+              setTimerModalVisible(true),
             );
           }}>
           <Timer
@@ -192,6 +171,8 @@ const Home = ({navigation}) => {
           timerModalVisible={timerModalVisible}
           setTimerModalVisible={setTimerModalVisible}
           setClockModalVisible={setClockModalVisible}
+          isRefresh={isRefresh}
+          setIsRefresh={setIsRefresh}
         />
         <View style={{flex: 0.3, paddingHorizontal: 20}}>
           <Pressable

@@ -1,4 +1,5 @@
 import {firebase} from '@react-native-firebase/database';
+import prompt from 'react-native-prompt-android';
 
 export async function getData(ref, isReturnKeys = true) {
   try {
@@ -49,5 +50,31 @@ function formatTimeString(time, showMsecs) {
     seconds < 10 ? 0 : ''
   }${seconds}:${msecs}`;
 }
+
+export const customPrompt = (title, message, okOnPress) => {
+  prompt(
+    title,
+    message,
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: password => {
+          if (password === '5772') {
+            okOnPress();
+          }
+        },
+      },
+    ],
+    {
+      type: 'numeric',
+      cancelable: false,
+      placeholder: '비밀번호 입력...',
+    },
+  );
+};
 
 export {formatTimeString};
