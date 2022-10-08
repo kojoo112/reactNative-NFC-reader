@@ -36,7 +36,7 @@ const CameraView = () => {
 
   if (device == null) return <LoadingView />;
   return hasPermission ? (
-    <View style={{width: windowWidth, height: 200}}>
+    <View style={{width: windowWidth, height: 400}}>
       <Camera style={{flex: 1}} device={device} isActive={isActive} />
     </View>
   ) : (
