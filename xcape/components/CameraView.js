@@ -4,9 +4,11 @@ import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {Dimensions} from 'react-native';
 import LoadingView from './LoadingView';
 
-const CameraView = () => {
+const CameraView = (props) => {
   const [hasPermission, setHasPermission] = useState();
   const [isActive, setIsActive] = useState(true);
+
+  const height = Number(props.height);
 
   useEffect(() => {
     const getPermission = async () => {
@@ -36,7 +38,7 @@ const CameraView = () => {
 
   if (device == null) return <LoadingView />;
   return hasPermission ? (
-    <View style={{width: windowWidth, height: 400}}>
+    <View style={{width: windowWidth, height: height}}>
       <Camera style={{flex: 1}} device={device} isActive={isActive} />
     </View>
   ) : (

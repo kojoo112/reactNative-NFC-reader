@@ -16,13 +16,15 @@ const componentList = {
 
 const TagView = props => {
   const components = props.route.params.components;
+  console.log('components', components);
+  console.log('typeof', typeof components);
 
   return (
     <ScrollView style={{backgroundColor: 'black'}}>
       {components.map((element, idx) => {
         const Component = componentList[element.component];
 
-        if (element.answer) {
+        if (element.component === "PasswordTagView") {
           return (
             <Component
               key={idx}
@@ -30,7 +32,9 @@ const TagView = props => {
               moveToPage={element.moveToPage}
             />
           );
-        } else {
+        } else if (element.component === "CameraView") {
+          return <Component key={idx} height={element.height || 400} />
+        }else {
           return <Component key={idx} url={element.url} />;
         }
       })}
