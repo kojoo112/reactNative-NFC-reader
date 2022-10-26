@@ -15,6 +15,7 @@ import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TagRead from '../components/TagRead';
 import HintMessageView from '../components/HintMessageView';
+import NfcManager from 'react-native-nfc-manager';
 import {
   storeGetHintCount,
   storeGetHintList,
@@ -73,6 +74,19 @@ const Home = ({navigation}) => {
     const {text} = e.nativeEvent;
     setHintKey(text.toUpperCase());
   };
+
+  const getIsNfcEnabled = async () => {
+    try {
+      Vibration.vibrate(200, false);
+      if(!(await NfcManager.isEnabled())) {
+        ToastAndroid.show('NFC 기능을 켜주세요.', ToastAndroid.CENTER);
+      } else {
+        setModalVisible(!modalVisible);
+      }
+    } catch (e) {
+      console.warn('getIsNfcEnabled >>> ', e);
+    }
+  }
 
   const getHint = hintKey => {
     Vibration.vibrate(200, false);
@@ -177,10 +191,8 @@ const Home = ({navigation}) => {
         <View style={{flex: 0.3, paddingHorizontal: 20}}>
           <Pressable
             style={styles.tagButton}
-            onPress={() => {
-              Vibration.vibrate(200, false);
-              setModalVisible(!modalVisible);
-            }}>
+            onPress={() => {getIsNfcEnabled()}
+            }>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={styles.tagText}>TAG</Text>
               <Image source={taggingLogo} style={{width: 50, height: 50}} />
