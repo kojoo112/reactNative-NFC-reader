@@ -22,10 +22,7 @@ import {
   storeInitUseHintList,
   storeSetHintList,
   storeSetStartTime,
-  storeSetThemeName,
   storeSetTime,
-  storeSetDropdown,
-  storeGetDropdown,
 } from '../util/storageUtil';
 
 export const reducer = (state, action) => {
@@ -99,11 +96,11 @@ const Setting = ({navigation, route}) => {
 
   useEffect(() => {
     const initList = async () => {
-      const {merchantValue, themeValue} = await storeGetDropdown();
-
       const merchant = await getMerchantList();
-      const theme = await getThemeList(merchantValue);
-      const pageList = await getPageList(merchantValue, themeValue);
+      const merchantValue = Object.keys(await merchant).sort()[0];
+      const theme = await getThemeList(await merchantValue);
+      const themeValue = Object.keys(await theme).sort()[0];
+      const pageList = await getPageList(await merchantValue, await themeValue);
 
       const data = {
         merchantList: merchant,
@@ -119,9 +116,17 @@ const Setting = ({navigation, route}) => {
   }, []);
 
   const getHintList = async () => {
-    return await getData(
-      `/hintCode/${state.merchantValue}/${state.themeValue}`,
-    );
+      // `/hintCode/${state.merchantValue}/${state.themeValue}`,
+      const hintObject = {};
+      const hintList = await getData(`/hintCode`);
+      Object.values(hintList).map((value) => {
+        Object.values(value).map((value)=>{
+          Object.entries(value).map(([key, value]) => {
+            hintObject[key] = value;
+          })
+        })
+    });
+    return hintObject;
   };
 
   const getThemeName = async () => {
@@ -138,8 +143,48 @@ const Setting = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <View style={{flex: 1, ...styles.wrapperBox}}>
+      <View style={{flex: 0.4, ...styles.wrapperBox}}>
         <View style={styles.content}>
+          <Text style={{flex: 0.5, ...styles.label, marginRight: 25}}>시간</Text>
+            <TextInput
+              style={styles.timeTextInput}
+              keyboardType={'numeric'}
+              placeholder={'분 단위'}
+              onChangeText={e => setTimerTime(Number(e))}
+              defaultValue={'60'}
+              maxLength={3}></TextInput>
+          <Pressable
+            onPress={() => {
+              storeInitUseHintList().then(() => {
+                storeInitHintCount()
+                  .then(() => {
+                    setIsRefresh(isRefresh => !isRefresh);
+                    setTime(timerTime);
+                    storeSetStartTime('')
+                      .then(() => {
+                        return storeSetTime(timerTime);
+                      })
+                      .then(() => {
+                        navigation.navigate('Home');
+                      });
+                  });
+              });
+            }}
+            style={{ ...styles.button, flex: 0.7, marginLeft: 30}}>
+            <Text style={styles.textInButton}>저장</Text>
+          </Pressable>
+        </View>
+        <View style={styles.content}>
+          <Pressable style={{...styles.button, height: 40}}
+            onPress={() => {
+              storeSetHintList(getHintList);
+          }}>
+            <Text style={styles.textInButton}>힌트 동기화</Text>
+          </Pressable>
+        </View>
+      </View>
+      <View style={{flex: 0.6, ...styles.wrapperBox}}>
+      <View style={styles.content}>
           <Text style={styles.label}>가맹점</Text>
           <Dropdown
             selectValue={state.merchantValue}
@@ -155,54 +200,6 @@ const Setting = ({navigation, route}) => {
             action={themeChanged}
           />
         </View>
-        <View style={styles.content}>
-          <Text style={styles.label}>시간</Text>
-          <View style={{flex: 1}}>
-            <TextInput
-              style={styles.timeTextInput}
-              keyboardType={'numeric'}
-              placeholder={'분 단위'}
-              onChangeText={e => setTimerTime(Number(e))}
-              defaultValue={'60'}
-              maxLength={3}></TextInput>
-          </View>
-        </View>
-        <View style={styles.content}>
-          <Pressable
-            onPress={() => {
-              storeInitUseHintList().then(() => {
-                storeInitHintCount()
-                  .then(() => {
-                    return storeSetHintList(getHintList);
-                  })
-                  .then(() => {
-                    return storeSetThemeName(getThemeName);
-                  })
-                  .then(() => {
-                    return storeSetDropdown(
-                      state.merchantValue,
-                      state.themeValue,
-                    );
-                  })
-                  .then(() => {
-                    setIsRefresh(isRefresh => !isRefresh);
-                    setTime(timerTime);
-                    storeSetStartTime('')
-                      .then(() => {
-                        return storeSetTime(timerTime);
-                      })
-                      .then(() => {
-                        navigation.navigate('Home');
-                      });
-                  });
-              });
-            }}
-            style={styles.button}>
-            <Text style={styles.textInButton}>저장</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={{flex: 0.5, ...styles.wrapperBox}}>
         <View style={styles.content}>
           <Text style={styles.label}>Page</Text>
           <Dropdown
@@ -242,7 +239,8 @@ const styles = StyleSheet.create({
   },
   wrapperBox: {
     backgroundColor: '#212429',
-    margin: 20,
+    marginHorizontal: 20,
+    marginVertical: 40,
     justifyContent: 'space-around',
     alignItems: 'center',
     borderWidth: 1.5,
@@ -277,7 +275,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   timeTextInput: {
-    // flex: 1,
+    // flex: 0.5,
     width: 100,
     backgroundColor: '#717171',
     fontSize: 16,

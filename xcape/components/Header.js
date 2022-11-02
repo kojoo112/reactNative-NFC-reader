@@ -7,7 +7,6 @@ import {customPrompt} from '../util/util';
 
 const Header = ({
   hintCount,
-  themeName,
   setHintCount,
   setUseHintList,
   setIsRefresh,
@@ -31,7 +30,7 @@ const Header = ({
         <Icon name="settings-sharp" size={24} color={'white'} />
       </Pressable>
 
-      <Text style={styles.themeName}>{themeName}</Text>
+      {/* <Text style={styles.themeName}>{themeName}</Text> */}
       <View>
         <Pressable
           onLongPress={() => {
@@ -74,9 +73,9 @@ const styles = StyleSheet.create({
   hintCount: {
     color: 'white',
   },
-  themeName: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: '600',
-  },
+  // themeName: {
+  //   fontSize: 20,
+  //   color: 'white',
+  //   fontWeight: '600',
+  // },
 });
