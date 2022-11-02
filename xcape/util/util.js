@@ -13,7 +13,7 @@ export async function getData(ref, isReturnKeys = true) {
     if (isReturnKeys) {
       return snapshot.val();
     } else {
-      return Object.keys(snapshot.val()).sort();
+      return Object.keys(await snapshot.val()).sort();
     }
   } catch (e) {
     console.log('>>> Util.js >>> getData() : ', e);

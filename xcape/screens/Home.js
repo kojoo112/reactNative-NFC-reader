@@ -35,7 +35,6 @@ const taggingLogo = require('../assets/images/taging-logo.png');
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
-  const [themeName, setThemeName] = useState('');
   const [hintKey, setHintKey] = useState('');
   const [hintCount, setHintCount] = useState(0);
   const [hintMessage1, setHintMessage1] = useState('');
@@ -114,7 +113,6 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     storeGetHintList(setHintList);
-    storeGetThemeName(setThemeName);
     storeGetHintCount(setHintCount);
     storeGetUseHintList(setUseHintList);
     setHintKey('');
@@ -150,7 +148,6 @@ const Home = ({navigation}) => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <Header
-          themeName={themeName}
           hintCount={hintCount}
           setHintCount={setHintCount}
           setUseHintList={setUseHintList}
