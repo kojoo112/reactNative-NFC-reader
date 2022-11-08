@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   Vibration,
   View,
 } from 'react-native';
@@ -116,15 +117,15 @@ const Setting = ({navigation, route}) => {
   }, []);
 
   const getHintList = async () => {
-      // `/hintCode/${state.merchantValue}/${state.themeValue}`,
-      const hintObject = {};
-      const hintList = await getData(`/hintCode`);
-      Object.values(hintList).map((value) => {
-        Object.values(value).map((value)=>{
-          Object.entries(value).map(([key, value]) => {
-            hintObject[key] = value;
-          })
-        })
+    // `/hintCode/${state.merchantValue}/${state.themeValue}`,
+    const hintObject = {};
+    const hintList = await getData(`/hintCode`);
+    Object.values(hintList).map(value => {
+      Object.values(value).map(value => {
+        Object.entries(value).map(([key, value]) => {
+          hintObject[key] = value;
+        });
+      });
     });
     return hintObject;
   };
@@ -145,46 +146,55 @@ const Setting = ({navigation, route}) => {
     <View style={styles.container}>
       <View style={{flex: 0.4, ...styles.wrapperBox}}>
         <View style={styles.content}>
-          <Text style={{flex: 0.5, ...styles.label, marginRight: 25}}>시간</Text>
-            <TextInput
-              style={styles.timeTextInput}
-              keyboardType={'numeric'}
-              placeholder={'분 단위'}
-              onChangeText={e => setTimerTime(Number(e))}
-              defaultValue={'60'}
-              maxLength={3}></TextInput>
+          <Text style={{flex: 0.5, ...styles.label, marginRight: 25}}>
+            시간
+          </Text>
+          <TextInput
+            style={styles.timeTextInput}
+            keyboardType={'numeric'}
+            placeholder={'분 단위'}
+            onChangeText={e => setTimerTime(Number(e))}
+            defaultValue={'60'}
+            maxLength={3}></TextInput>
           <Pressable
             onPress={() => {
               storeInitUseHintList().then(() => {
-                storeInitHintCount()
-                  .then(() => {
-                    setIsRefresh(isRefresh => !isRefresh);
-                    setTime(timerTime);
-                    storeSetStartTime('')
-                      .then(() => {
-                        return storeSetTime(timerTime);
-                      })
-                      .then(() => {
-                        navigation.navigate('Home');
-                      });
-                  });
+                storeInitHintCount().then(() => {
+                  setIsRefresh(isRefresh => !isRefresh);
+                  setTime(timerTime);
+                  storeSetStartTime('')
+                    .then(() => {
+                      return storeSetTime(timerTime);
+                    })
+                    .then(() => {
+                      navigation.navigate('Home');
+                    });
+                });
               });
             }}
-            style={{ ...styles.button, flex: 0.7, marginLeft: 30}}>
+            style={{...styles.button, flex: 0.7, marginLeft: 30}}>
             <Text style={styles.textInButton}>저장</Text>
           </Pressable>
         </View>
         <View style={styles.content}>
-          <Pressable style={{...styles.button, height: 40}}
+          <Pressable
+            style={{...styles.button, height: 40}}
             onPress={() => {
-              storeSetHintList(getHintList);
-          }}>
+              Vibration.vibrate(200, false);
+              const hintList = getHintList();
+              if (Object.keys(hintList).length === 0) {
+                ToastAndroid.show('동기화에 실패했습니다.', ToastAndroid.SHORT);
+              } else {
+                ToastAndroid.show('동기화 성공!', ToastAndroid.SHORT);
+                storeSetHintList(hintList);
+              }
+            }}>
             <Text style={styles.textInButton}>힌트 동기화</Text>
           </Pressable>
         </View>
       </View>
       <View style={{flex: 0.6, ...styles.wrapperBox}}>
-      <View style={styles.content}>
+        <View style={styles.content}>
           <Text style={styles.label}>가맹점</Text>
           <Dropdown
             selectValue={state.merchantValue}
