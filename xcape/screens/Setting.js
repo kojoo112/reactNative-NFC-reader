@@ -181,13 +181,17 @@ const Setting = ({navigation, route}) => {
             style={{...styles.button, height: 40}}
             onPress={() => {
               Vibration.vibrate(200, false);
-              const hintList = getHintList();
-              if (Object.keys(hintList).length === 0) {
-                ToastAndroid.show('동기화에 실패했습니다.', ToastAndroid.SHORT);
-              } else {
-                ToastAndroid.show('동기화 성공!', ToastAndroid.SHORT);
-                storeSetHintList(hintList);
-              }
+              getHintList().then(result => {
+                storeSetHintList(result);
+                if (Object.keys(result).length === 0) {
+                  ToastAndroid.show(
+                    '동기화에 실패했습니다.',
+                    ToastAndroid.SHORT,
+                  );
+                } else {
+                  ToastAndroid.show('동기화 성공!', ToastAndroid.SHORT);
+                }
+              });
             }}>
             <Text style={styles.textInButton}>힌트 동기화</Text>
           </Pressable>

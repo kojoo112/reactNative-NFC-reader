@@ -7,29 +7,34 @@ export const storeSetDropdown = async (merchantValue, themeValue) => {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
 export const storeGetDropdown = async () => {
   try {
     let merchantValue = await AsyncStorage.getItem('merchantValue');
     let themeValue = await AsyncStorage.getItem('themeValue');
 
-    if(merchantValue == null || merchantValue == '' || themeValue == null || themeValue == '') {
+    if (
+      merchantValue == null ||
+      merchantValue == '' ||
+      themeValue == null ||
+      themeValue == ''
+    ) {
       merchantValue = 'mrc001';
       themeValue = 'thm001';
     }
     const dropdownItem = {
-      "merchantValue": merchantValue,
-      "themeValue": themeValue,
-    }
+      merchantValue: merchantValue,
+      themeValue: themeValue,
+    };
     return dropdownItem;
   } catch (e) {
     console.error(e);
   }
-}
+};
 
 // 스토리지에 테마 이름 저장
-export const storeSetThemeName = async (getThemeName, ) => {
+export const storeSetThemeName = async getThemeName => {
   const themeName = JSON.stringify(await getThemeName());
   try {
     await AsyncStorage.setItem('themeName', themeName);
@@ -50,9 +55,9 @@ export const storeGetThemeName = async setThemeName => {
 };
 
 // 스토리지에 힌트 리스트 저장 (기존 : storeHintList)
-export const storeSetHintList = async getHintList => {
+export const storeSetHintList = async newHintList => {
   // isSearch 추가
-  const hintList = JSON.stringify(await getHintList());
+  const hintList = JSON.stringify(newHintList);
   try {
     await AsyncStorage.setItem('hintList', hintList);
   } catch (e) {
