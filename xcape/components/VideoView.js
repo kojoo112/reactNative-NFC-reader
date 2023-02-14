@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import Video from 'react-native-video';
-import PlayerControls from './/PlayerControls';
-import ProgressBar from './/ProgressBar';
+import PlayerControls from './PlayerControls';
+import ProgressBar from './ProgressBar';
 
 const VideoView = ({url}) => {
   const videoRef = useRef(null);
@@ -45,18 +45,23 @@ const VideoView = ({url}) => {
   };
 
   const skipBackward = () => {
-    videoRef.current.seek(state.currentTime - 15);
-    setState({...state, currentTime: state.currentTime - 15});
+    if (state.currentTime < 3) {
+      videoRef.current.seek(0);
+      setState({...state, currentTime: 0});
+    } else {
+      videoRef.current.seek(state.currentTime - 3);
+      setState({...state, currentTime: state.currentTime - 3});
+    }
   };
 
   const skipForward = () => {
-    videoRef.current.seek(state.currentTime + 15);
-    setState({...state, currentTime: state.currentTime + 15});
+    videoRef.current.seek(state.currentTime + 3);
+    setState({...state, currentTime: state.currentTime + 3});
   };
 
   const onSeek = data => {
-    videoRef.current.seek(data.seekTime);
-    setState({...state, currentTime: data.seekTime});
+    // videoRef.current.seek(data.seekTime);
+    // setState({...state, currentTime: data.seekTime});
   };
 
   const onLoadEnd = data => {
@@ -80,9 +85,9 @@ const VideoView = ({url}) => {
   };
 
   const showControls = () => {
-    // state.showControls
-    //   ? setState({...state, showControls: false})
-    //   : setState({...state, showControls: true});
+    state.showControls
+      ? setState({...state, showControls: false})
+      : setState({...state, showControls: true});
   };
 
   useEffect(() => {
@@ -120,6 +125,7 @@ const VideoView = ({url}) => {
             onProgress={onProgress}
             onEnd={onEnd}
             paused={!state.play}
+            onSeek={(e)=> console.log('asdfasdasf',  e)}
             source={{
               uri: videoUrl,
             }}
