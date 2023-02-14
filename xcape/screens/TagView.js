@@ -16,8 +16,6 @@ const componentList = {
 
 const TagView = props => {
   const components = props.route.params.components;
-  console.log('components', components);
-  console.log('typeof', typeof components);
 
   return (
     <ScrollView style={{backgroundColor: 'black'}}>
