@@ -16,6 +16,7 @@ const SetTimerModal = ({
   setClockModalVisible,
   isRefresh,
   setIsRefresh,
+  toggleGameStatus
 }) => {
   const [isStarted, setIsStarted] = useState('');
   const closeModal = () => {
@@ -50,6 +51,7 @@ const SetTimerModal = ({
               })
               .then(() => {
                 closeModal();
+                toggleGameStatus(false);
                 resetStopwatch();
                 setClockModalVisible(true);
                 setIsRefresh(!isRefresh);

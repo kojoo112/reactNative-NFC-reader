@@ -23,19 +23,18 @@ export const storeGetDropdown = async () => {
       merchantValue = 'mrc001';
       themeValue = 'thm001';
     }
-    const dropdownItem = {
+    return {
       merchantValue: merchantValue,
       themeValue: themeValue,
     };
-    return dropdownItem;
   } catch (e) {
     console.error(e);
   }
 };
 
 // 스토리지에 테마 이름 저장
-export const storeSetThemeName = async getThemeName => {
-  const themeName = JSON.stringify(await getThemeName());
+export const storeSetThemeName = async theme => {
+  const themeName = JSON.stringify(await theme);
   try {
     await AsyncStorage.setItem('themeName', themeName);
   } catch (e) {

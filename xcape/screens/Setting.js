@@ -20,9 +20,9 @@ import {
 } from '../util/constants';
 import {
   storeInitHintCount,
-  storeInitUseHintList,
+  storeInitUseHintList, storeSetDropdown,
   storeSetHintList,
-  storeSetStartTime,
+  storeSetStartTime, storeSetThemeName,
   storeSetTime,
 } from '../util/storageUtil';
 
@@ -144,60 +144,7 @@ const Setting = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <View style={{flex: 0.4, ...styles.wrapperBox}}>
-        <View style={styles.content}>
-          <Text style={{flex: 0.5, ...styles.label, marginRight: 25}}>
-            시간
-          </Text>
-          <TextInput
-            style={styles.timeTextInput}
-            keyboardType={'numeric'}
-            placeholder={'분 단위'}
-            onChangeText={e => setTimerTime(Number(e))}
-            defaultValue={'60'}
-            maxLength={3}></TextInput>
-          <Pressable
-            onPress={() => {
-              storeInitUseHintList().then(() => {
-                storeInitHintCount().then(() => {
-                  setIsRefresh(isRefresh => !isRefresh);
-                  setTime(timerTime);
-                  storeSetStartTime('')
-                    .then(() => {
-                      return storeSetTime(timerTime);
-                    })
-                    .then(() => {
-                      navigation.navigate('Home');
-                    });
-                });
-              });
-            }}
-            style={{...styles.button, flex: 0.7, marginLeft: 30}}>
-            <Text style={styles.textInButton}>저장</Text>
-          </Pressable>
-        </View>
-        <View style={styles.content}>
-          <Pressable
-            style={{...styles.button, height: 40}}
-            onPress={() => {
-              Vibration.vibrate(200, false);
-              getHintList().then(result => {
-                storeSetHintList(result);
-                if (Object.keys(result).length === 0) {
-                  ToastAndroid.show(
-                    '동기화에 실패했습니다.',
-                    ToastAndroid.SHORT,
-                  );
-                } else {
-                  ToastAndroid.show('동기화 성공!', ToastAndroid.SHORT);
-                }
-              });
-            }}>
-            <Text style={styles.textInButton}>힌트 동기화</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={{flex: 0.6, ...styles.wrapperBox}}>
+      <View style={{flex: 1, ...styles.wrapperBox}}>
         <View style={styles.content}>
           <Text style={styles.label}>가맹점</Text>
           <Dropdown
@@ -221,6 +168,62 @@ const Setting = ({navigation, route}) => {
             objectList={state.pageList}
             action={pageChanged}
           />
+        </View>
+        <View style={styles.content}>
+          <Text style={{flex: 0.5, ...styles.label, marginRight: 25}}>
+            시간
+          </Text>
+          <TextInput
+              style={styles.timeTextInput}
+              keyboardType={'numeric'}
+              placeholder={'분 단위'}
+              onChangeText={e => setTimerTime(Number(e))}
+              defaultValue={'60'}
+              maxLength={3}></TextInput>
+          <Pressable
+              onPress={() => {
+                storeInitUseHintList().then(() => {
+                  storeInitHintCount().then(() => {
+                    setTime(timerTime);
+                    storeSetStartTime('')
+                        .then(() => {
+                          return storeSetTime(timerTime);
+                        }).then(() => {
+                          return getThemeName()
+                        }).then((themeName) => {
+                          return storeSetThemeName(themeName)
+                        }).then(() => {
+                          return storeSetDropdown(state.merchantValue, state.themeValue)
+                        }).then(() => {
+                          setIsRefresh(isRefresh => !isRefresh);
+                          navigation.navigate('Home', {state});
+                        });
+                  });
+                });
+              }}
+              style={{...styles.button, flex: 0.7, marginLeft: 30}}>
+            <Text style={styles.textInButton}>저장</Text>
+          </Pressable>
+        </View>
+        <View style={styles.content}>
+          <Pressable
+              style={{...styles.button, height: 40}}
+              onPress={() => {
+                Vibration.vibrate(200, false);
+                getHintList().then(result => {
+                  storeSetHintList(result);
+                  if (Object.keys(result).length === 0) {
+                    ToastAndroid.show(
+                        '동기화에 실패했습니다.',
+                        ToastAndroid.SHORT,
+                    );
+                  } else {
+                    ToastAndroid.show('동기화 성공!', ToastAndroid.SHORT);
+                  }
+                });
+              }}>
+            <Text style={styles.textInButton}>힌트 동기화</Text>
+          </Pressable>
         </View>
         <View style={styles.content}>
           <Pressable
