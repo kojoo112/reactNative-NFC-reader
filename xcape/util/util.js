@@ -20,6 +20,20 @@ export async function getData(ref, isReturnKeys = true) {
   }
 }
 
+export const setData = async (reference, data) => {
+  try {
+    await firebase
+        .app()
+        .database(
+            'https://xcape-hint-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
+        )
+        .ref(reference)
+        .set(data);
+  } catch (e) {
+    console.error("util.js >>> storeNewComponents >>> ", e);
+  }
+};
+
 function formatTimeString(time, showMsecs) {
   let status;
   if (time < 0) {

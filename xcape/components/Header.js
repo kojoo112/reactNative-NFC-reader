@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, Vibration, View} from 'react-native';
+import {Pressable, StyleSheet, Text, ToastAndroid, Vibration, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
@@ -7,6 +7,7 @@ import {customPrompt} from '../util/util';
 
 const Header = ({
   hintCount,
+  themeName,
   setHintCount,
   setUseHintList,
   setIsRefresh,
@@ -16,21 +17,8 @@ const Header = ({
 
   return (
     <View style={styles.container}>
-      <Pressable
-        hitSlop={{top: 10, left: 10, right: 20, bottom: 20}}
-        onPress={() => {
-          Vibration.vibrate(200, false);
-          customPrompt('힌트관리자', '관리자 비밀번호를 입력하세요', () => {
-            navigation.navigate('Setting', {
-              setIsRefresh: setIsRefresh,
-              setTime: setTime,
-            });
-          });
-        }}>
-        <Icon name="settings-sharp" size={24} color={'white'} />
-      </Pressable>
-
-      {/* <Text style={styles.themeName}>{themeName}</Text> */}
+        <View></View>
+       <Text style={styles.themeName}>{themeName}</Text>
       <View>
         <Pressable
           onLongPress={() => {
@@ -73,9 +61,10 @@ const styles = StyleSheet.create({
   hintCount: {
     color: 'white',
   },
-  // themeName: {
-  //   fontSize: 20,
-  //   color: 'white',
-  //   fontWeight: '600',
-  // },
+  themeName: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: '600',
+    marginLeft: 50
+  },
 });

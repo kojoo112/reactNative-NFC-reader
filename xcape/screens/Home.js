@@ -17,6 +17,7 @@ import TagRead from '../components/TagRead';
 import HintMessageView from '../components/HintMessageView';
 import NfcManager from 'react-native-nfc-manager';
 import {
+  storeGetDropdown,
   storeGetHintCount,
   storeGetHintList,
   storeGetStartTime,
@@ -29,12 +30,13 @@ import {
 import ClockModal from '../components/ClockModal';
 import SetTimerModal from '../components/SetTimerModal';
 import Timer from '../components/Timer';
-import {customPrompt} from '../util/util';
+import {customPrompt, getData, setData} from '../util/util';
 
 const taggingLogo = require('../assets/images/taging-logo.png');
 
 const Home = ({navigation}) => {
   const [hintList, setHintList] = useState({});
+  const [themeName, setThemeName] = useState('');
   const [hintKey, setHintKey] = useState('');
   const [hintCount, setHintCount] = useState(0);
   const [hintMessage1, setHintMessage1] = useState('');
@@ -111,16 +113,53 @@ const Home = ({navigation}) => {
     }
   };
 
+  const toggleGameStatus = (isAction) => {
+    storeGetDropdown().then(state => {
+      const {merchantValue, themeValue} = state;
+      if (isAction) {
+        const data = {
+          isAction: true,
+          recentStartTime: new Date().getTime()
+        }
+        setData(`/gameStatus/${merchantValue}/${themeValue}`, data).then(() => {
+          return true
+        });
+      } else {
+        const data = {
+          isAction: false,
+          recentStartTime: null
+        }
+        setData(`/gameStatus/${merchantValue}/${themeValue}`, data).then(() => {
+          return false
+        });
+      }
+    });
+  }
+
   useEffect(() => {
-    storeGetHintList(setHintList);
-    storeGetHintCount(setHintCount);
-    storeGetUseHintList(setUseHintList);
-    setHintKey('');
-    setHintMessage1('');
-    setHintMessage2('');
-    setHintVisible(false);
-    resetStopwatch();
-    setClockModalVisible(true);
+    storeGetHintList(setHintList).then(() => {
+      return storeGetThemeName(setThemeName);
+    }).then(() => {
+      return storeGetHintCount(setHintCount);
+    }).then(() => {
+      return storeGetUseHintList(setUseHintList);
+    }).then(() => {
+      setHintKey('');
+      setHintMessage1('');
+      setHintMessage2('');
+      setHintVisible(false);
+      storeGetDropdown().then(state => {
+        if (state.merchantValue && state.themeValue) {
+          const {merchantValue, themeValue} = state;
+          getData(`/gameStatus/${merchantValue}/${themeValue}`).then((res) => {
+            if (!res.isAction) {
+              resetStopwatch();
+              setClockModalVisible(true);
+            }
+          });
+        }
+      });
+    });
   }, [isRefresh]);
 
   useEffect(() => {
@@ -132,8 +171,17 @@ const Home = ({navigation}) => {
       .then(startTime => {
         if (startTime) {
           setStartTime(startTime);
-          startStopwatch();
-          setClockModalVisible(false);
+          storeGetDropdown().then(state => {
+            if (state.merchantValue && state.themeValue) {
+              const {merchantValue, themeValue} = state;
+              getData(`/gameStatus/${merchantValue}/${themeValue}`).then((res) => {
+                if (res.isAction) {
+                  startStopwatch();
+                  setClockModalVisible(false);
+                }
+              });
+            }
+          });
         }
       });
   }, []);
@@ -148,6 +196,7 @@ const Home = ({navigation}) => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <Header
+          themeName={themeName}
           hintCount={hintCount}
           setHintCount={setHintCount}
           setUseHintList={setUseHintList}
@@ -171,6 +220,9 @@ const Home = ({navigation}) => {
             setStartTime={setStartTime}></Timer>
         </Pressable>
         <ClockModal
+          setTime={setTime}
+          toggleGameStatus={toggleGameStatus}
+          setIsRefresh={setIsRefresh}
           startStopwatch={startStopwatch}
           clockModalVisible={clockModalVisible}
           setClockModalVisible={setClockModalVisible}
@@ -184,6 +236,7 @@ const Home = ({navigation}) => {
           setClockModalVisible={setClockModalVisible}
           isRefresh={isRefresh}
           setIsRefresh={setIsRefresh}
+          toggleGameStatus={toggleGameStatus}
         />
         <View style={{flex: 0.3, paddingHorizontal: 20}}>
           <Pressable
